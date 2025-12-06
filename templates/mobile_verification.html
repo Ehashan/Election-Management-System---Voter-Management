@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Mobile Verification</h2>
+    <p style="text-align: center; color: #666;">Please enter the verification code sent to your mobile number.</p>
+
+    <!-- DEBUG: Show code for testing -->
+    {% if debug_code %}
+    <div
+        style="background: #fffacd; border: 2px solid #ffa500; padding: 15px; margin: 20px 0; border-radius: 8px; text-align: center;">
+        <strong>🔍 TEST MODE - Your Verification Code:</strong>
+        <h3 style="color: #ff6600; margin: 10px 0;">{{ debug_code }}</h3>
+        <small style="color: #666;">(In production, this would be sent via SMS)</small>
+    </div>
+    {% endif %}
+
+    {% if success %}
+    <div class="success" style="text-align: center; margin-bottom: 20px;">{{ success }}</div>
+    {% endif %}
+
+    {% if error %}
+    <div class="error" style="text-align: center; margin-bottom: 20px;">{{ error }}</div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="mobile_number">Your Mobile Number</label>
+            <input type="text" name="mobile_number" id="mobile_number" value="{{ mobile_number }}" readonly>
+            <small>This is the number you registered with</small>
+        </div>
+
+        <div class="form-group">
+            <label for="code">Enter the Verification Code</label>
+            <input type="text" name="code" id="code" required maxlength="6" placeholder="Enter 6-digit code">
+        </div>
+
+        {% if not code_expired %}
+        <div style="text-align: center; margin: 15px 0;">
+            <span id="code-timer" style="color: #10b981; font-weight: 600;">5:00</span>
+            <small style="display: block; color: #666;">Time remaining</small>
+        </div>
+        {% endif %}
+
+        <div class="recaptcha-container">
+            <div class="recaptcha-placeholder">
+                [ I'm not a robot (reCAPTCHA - Test Mode) ]
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button type="button" class="btn btn-secondary" onclick="this.form.reset()">🔄 Reset</button>
+            <button type="submit" class="btn btn-primary">✓ Verify Code</button>
+        </div>
+    </form>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <form method="post" style="display: inline;">
+            {% csrf_token %}
+            <input type="hidden" name="resend" value="true">
+            <button type="submit" id="resend-code" class="btn btn-secondary">📱 Resend Code</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

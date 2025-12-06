@@ -1,0 +1,121 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block content %}
+<style>
+    /* Dark Mode Support using Django's native variables */
+    :root {
+        --primary-color: #3b82f6;
+        --row-even-bg: var(--djn-body-bg, #f9fafb);
+        --row-odd-bg: var(--djn-body-bg, #ffffff);
+        --text-color: var(--body-fg, #333);
+        --border-color: var(--hairline-color, #ddd);
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .module {
+            background: var(--body-bg);
+            color: var(--body-fg);
+        }
+
+        table {
+            color: var(--body-fg);
+        }
+
+        tr {
+            background: var(--body-bg) !important;
+        }
+
+        th {
+            background: #1e3a8a !important;
+            /* Darker blue for header */
+            color: white !important;
+            border-color: #374151 !important;
+        }
+
+        td {
+            border-color: #374151 !important;
+            color: var(--body-fg) !important;
+        }
+
+        /* Override the cycle background */
+        tbody tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: transparent !important;
+        }
+    }
+</style>
+
+<div id="content-main">
+    <div class="module" style="margin-bottom: 20px;">
+        <h2>{{ title }}</h2>
+
+        <div style="padding: 20px;">
+            <p><strong>Total Registered Voters:</strong> {{ voters|length }}</p>
+
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px; min-width: 1200px;">
+                    <thead>
+                        <tr style="background: #3b82f6; color: white;">
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Voter ID</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">NIC</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Name</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Email</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">DOB</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Gender</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Admin District</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Election District</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Polling Division</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Status</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Registered At</th>
+                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for voter in voters %}
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd; font-weight: 600;">
+                                <a href="{% url 'admin:voters_voterproxy_change' voter.voter_id %}"
+                                    style="color: #3b82f6; text-decoration: none;">
+                                    {{ voter.voter_id }}
+                                </a>
+                            </td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">{{ voter.nic }}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">{{ voter.name }}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">{{ voter.email }}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">{{ voter.date_of_birth }}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">{{ voter.gender }}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">{{ voter.admin_district }}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">{{ voter.election_district }}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">{{ voter.polling_division }}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">
+                                <span
+                                    style="background: {% if voter.registration_status == 'Verified' %}#10b981{% elif voter.registration_status == 'Pending' %}#f59e0b{% else %}#ef4444{% endif %}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
+                                    {{ voter.registration_status }}
+                                </span>
+                            </td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">{{ voter.registered_at }}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">
+                                <a href="{% url 'admin:voters_voterproxy_change' voter.voter_id %}"
+                                    style="color: #3b82f6; margin-right: 10px; text-decoration: none;">✏️</a>
+                                <a href="{% url 'admin:voters_voterproxy_delete' voter.voter_id %}"
+                                    style="color: #dc2626; text-decoration: none;">🗑️</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="12" style="padding: 20px; text-align: center; color: #666;">
+                                No voter registration data found
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

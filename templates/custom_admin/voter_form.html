@@ -1,0 +1,101 @@
+{% extends "custom_admin/base_admin.html" %}
+
+{% block content %}
+<style>
+    .form-container {
+        background: var(--bg-card);
+        padding: 30px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--text-light);
+        font-weight: 500;
+        font-size: 1.2rem;
+        /* Increased font size as requested */
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        color: white;
+        font-family: 'Roboto', sans-serif;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .help-text {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-top: 5px;
+    }
+
+    .error-list {
+        color: var(--danger);
+        font-size: 0.9rem;
+        margin-top: 5px;
+        list-style: none;
+    }
+</style>
+
+<div class="form-container">
+    <div class="section-header">
+        <h2 class="section-title">{{ title }}</h2>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}
+            <div class="help-text">{{ field.help_text }}</div>
+            {% endif %}
+            {% if field.errors %}
+            <ul class="error-list">
+                {% for error in field.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <div class="form-actions">
+            <a href="{% url 'admin_voter_list' %}" class="btn"
+                style="background: rgba(255,255,255,0.1); color: white;">Cancel</a>
+            <button type="submit" class="btn btn-primary">
+                {% if is_edit %}Update Voter{% else %}Add Voter{% endif %}
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

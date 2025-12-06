@@ -1,0 +1,22 @@
+from django.urls import path
+from . import views, admin_views
+
+urlpatterns = [
+    path('', views.home, name='home'),
+    path('signup/', views.voter_signup, name='voter_signup'),
+    path('verify/', views.mobile_verification, name='mobile_verification'),
+    path('signin/', views.voter_signin, name='voter_signin'),
+    path('registration/', views.voter_registration, name='voter_registration'),
+    path('admin-login/', views.admin_login, name='admin_login'),
+    
+    # Custom Admin URLs
+    path('custom-admin/dashboard/', admin_views.admin_dashboard, name='admin_dashboard'),
+    path('custom-admin/voters/', admin_views.admin_voter_list, name='admin_voter_list'),
+    path('custom-admin/voters/add/', admin_views.admin_add_voter, name='admin_add_voter'),
+    path('custom-admin/voters/edit/<str:voter_id>/', admin_views.admin_edit_voter, name='admin_edit_voter'),
+    path('custom-admin/voters/delete/<str:voter_id>/', admin_views.admin_delete_voter, name='admin_delete_voter'),
+    
+    # Signup Management
+    path('custom-admin/signups/', admin_views.admin_signup_list, name='admin_signup_list'),
+    path('custom-admin/signups/delete/<str:nic>/', admin_views.admin_delete_signup, name='admin_delete_signup'),
+]

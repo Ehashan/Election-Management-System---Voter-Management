@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Sign Up</h2>
+    <form method="post">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="error" style="margin-bottom: 20px;">
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+
+        <div class="form-group">
+            <label for="id_nic">SLIN / NIC</label>
+            {{ form.nic }}
+            {% if form.nic.errors %}
+            <div class="error">{{ form.nic.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_mobile_number">Registered Mobile No</label>
+            {{ form.mobile_number }}
+            {% if form.mobile_number.errors %}
+            <div class="error">{{ form.mobile_number.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_name">Name</label>
+            {{ form.name }}
+            {% if form.name.errors %}
+            <div class="error">{{ form.name.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_email">Email</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+            <div class="error">{{ form.email.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_username">User Name</label>
+            <input type="text" value="{{ form.nic.value|default:'' }}" readonly style="background-color: #e8e8e8;">
+            <small style="color: #666; font-size: 12px;">Username will be your NIC</small>
+        </div>
+
+        <div class="form-group">
+            <label for="id_password">Password</label>
+            {{ form.password }}
+            {% if form.password.errors %}
+            <div class="error">{{ form.password.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_confirm_password">Password (Retype)</label>
+            {{ form.confirm_password }}
+            {% if form.confirm_password.errors %}
+            <div class="error">{{ form.confirm_password.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="checkbox-group">
+            {{ form.terms_accepted }}
+            <label for="id_terms_accepted">I accept the <a href="#">Terms of Service</a></label>
+            {% if form.terms_accepted.errors %}
+            <div class="error">{{ form.terms_accepted.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="recaptcha-container">
+            <div style="border: 1px solid #ddd; padding: 10px; background: #f9f9f9; text-align: center;">
+                [ I'm not a robot (reCAPTCHA) ]
+            </div>
+        </div>
+
+        <div class="text-center">
+            <a href="#">Instructions</a>
+        </div>
+
+        <div class="button-group">
+            <button type="button" class="btn btn-secondary" onclick="this.form.reset()">🔄 Reset</button>
+            <button type="submit" class="btn btn-primary">✓ Sign Up</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

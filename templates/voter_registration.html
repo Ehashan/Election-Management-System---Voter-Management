@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="max-width: 900px;">
+    <h2>Voter Registration</h2>
+    <p style="text-align: center; color: #666; margin-bottom: 30px;">
+        Complete your registration to receive your unique Voter ID
+    </p>
+
+    <form method="post" id="registrationForm">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="error" style="margin-bottom: 20px;">
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+
+        <div class="form-group">
+            <label for="id_name">Name</label>
+            {{ form.name }}
+            <small>You can update your name if needed</small>
+            {% if form.name.errors %}
+            <div class="error">{{ form.name.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_nic">SLIN/NIC</label>
+            {{ form.nic }}
+            <small>You can update your NIC if needed</small>
+            {% if form.nic.errors %}
+            <div class="error">{{ form.nic.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_date_of_birth">Date of Birth</label>
+            {{ form.date_of_birth }}
+            {% if form.date_of_birth.errors %}
+            <div class="error">{{ form.date_of_birth.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label>Gender</label>
+            <div class="radio-group">
+                {% for choice in form.gender %}
+                {{ choice }}
+                {% endfor %}
+            </div>
+            {% if form.gender.errors %}
+            <div class="error">{{ form.gender.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_election_year">Election Year</label>
+            {{ form.election_year }}
+            {% if form.election_year.errors %}
+            <div class="error">{{ form.election_year.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label>Admin District</label>
+            <div class="radio-group">
+                {% for choice in form.admin_district %}
+                {{ choice }}
+                {% endfor %}
+            </div>
+            {% if form.admin_district.errors %}
+            <div class="error">{{ form.admin_district.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label>Election District</label>
+            <div class="radio-group">
+                {% for choice in form.election_district %}
+                {{ choice }}
+                {% endfor %}
+            </div>
+            {% if form.election_district.errors %}
+            <div class="error">{{ form.election_district.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_polling_division">Polling Division</label>
+            {{ form.polling_division }}
+            {% if form.polling_division.errors %}
+            <div class="error">{{ form.polling_division.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_postal_code">Postal Code</label>
+            {{ form.postal_code }}
+            {% if form.postal_code.errors %}
+            <div class="error">{{ form.postal_code.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_grama_niladari_division">Grama Niladari Division</label>
+            {{ form.grama_niladari_division }}
+            {% if form.grama_niladari_division.errors %}
+            <div class="error">{{ form.grama_niladari_division.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_village_street">Village / Street</label>
+            {{ form.village_street }}
+            {% if form.village_street.errors %}
+            <div class="error">{{ form.village_street.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_household">Household</label>
+            {{ form.household }}
+            {% if form.household.errors %}
+            <div class="error">{{ form.household.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label>Face Recognition Image</label>
+            <div class="camera-section">
+                <video id="video" width="320" height="240" autoplay></video>
+                <button type="button" id="snap" class="btn btn-secondary" style="margin: 10px;">📷 Capture
+                    Photo</button>
+                <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+                <img id="photo" alt="Captured Photo" style="display:none; max-width: 320px;">
+                <input type="hidden" name="face_image_data" id="face_image_data">
+            </div>
+        </div>
+
+        <div class="recaptcha-container">
+            <div style="border: 1px solid #ddd; padding: 10px; background: #f9f9f9; text-align: center;">
+                [ I'm not a robot (reCAPTCHA) ]
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button type="button" class="btn btn-secondary" onclick="this.form.reset()">🔄 Reset</button>
+            <button type="submit" class="btn btn-primary">✓ Submit Registration</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const photo = document.getElementById('photo');
+    const snap = document.getElementById('snap');
+    const faceImageData = document.getElementById('face_image_data');
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (stream) {
+            video.srcObject = stream;
+            video.play();
+        })
+        .catch(function (err) {
+            console.log("An error occurred: " + err);
+            alert("Camera access denied or not available.");
+        });
+
+    snap.addEventListener('click', function () {
+        const context = canvas.getContext('2d');
+        context.drawImage(video, 0, 0, 320, 240);
+
+        const data = canvas.toDataURL('image/png');
+        photo.setAttribute('src', data);
+        photo.style.display = 'block';
+        video.style.display = 'none';
+
+        faceImageData.value = data;
+    });
+</script>
+{% endblock %}

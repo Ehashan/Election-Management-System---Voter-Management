@@ -1,0 +1,25 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block content %}
+<div id="content-main">
+    <div class="module" style="max-width: 600px; margin: 0 auto; text-align: center; padding: 40px;">
+        <h2 style="color: #dc2626; margin-bottom: 20px;">⚠️ Confirm Deletion</h2>
+
+        <p style="font-size: 1.1rem; margin-bottom: 30px;">
+            Are you sure you want to delete <strong>{{ object_name }}</strong>?
+            <br>
+            <span style="color: #666; font-size: 0.9rem;">This action cannot be undone.</span>
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div style="display: flex; justify-content: center; gap: 20px;">
+                <a href="{% url 'admin:voters_voterproxy_changelist' %}" class="button"
+                    style="background: #6b7280; text-decoration: none;">Cancel</a>
+                <input type="submit" value="Yes, I'm sure" style="background: #dc2626;">
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

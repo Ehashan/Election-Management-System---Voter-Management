@@ -1,0 +1,149 @@
+{% extends "custom_admin/base_admin.html" %}
+
+{% block content %}
+<style>
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .stat-card {
+        background: var(--bg-card);
+        padding: 25px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary-color);
+    }
+
+    .stat-info h3 {
+        font-size: 2.5rem;
+        font-family: 'Orbitron', sans-serif;
+        margin-bottom: 5px;
+        background: linear-gradient(45deg, #fff, #aaa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .stat-info p {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    .icon-blue {
+        background: rgba(0, 243, 255, 0.1);
+        color: var(--primary-color);
+    }
+
+    .icon-purple {
+        background: rgba(188, 19, 254, 0.1);
+        color: var(--secondary-color);
+    }
+
+    .icon-green {
+        background: rgba(0, 255, 157, 0.1);
+        color: var(--success);
+    }
+
+    .icon-orange {
+        background: rgba(255, 204, 0, 0.1);
+        color: var(--warning);
+    }
+
+    .recent-activity {
+        margin-top: 30px;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .section-title {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1.2rem;
+        color: var(--primary-color);
+    }
+</style>
+
+<!-- Statistics Cards -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-info">
+            <h3>{{ total_voters }}</h3>
+            <p>Total Voters</p>
+        </div>
+        <div class="stat-icon icon-blue">
+            <i class="fas fa-users"></i>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-info">
+            <h3>{{ verified_voters }}</h3>
+            <p>Verified</p>
+        </div>
+        <div class="stat-icon icon-green">
+            <i class="fas fa-check-circle"></i>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-info">
+            <h3>{{ pending_voters }}</h3>
+            <p>Pending</p>
+        </div>
+        <div class="stat-icon icon-orange">
+            <i class="fas fa-clock"></i>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-info">
+            <h3>{{ total_signups }}</h3>
+            <p>Total Signups</p>
+        </div>
+        <div class="stat-icon icon-purple">
+            <i class="fas fa-user-plus"></i>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="section-header">
+    <h2 class="section-title">Quick Actions</h2>
+</div>
+
+<div style="display: flex; gap: 15px; margin-bottom: 30px;">
+    <a href="{% url 'admin_voter_list' %}" class="btn btn-primary">
+        <i class="fas fa-user-edit"></i> Manage Voters
+    </a>
+    <a href="#" class="btn" style="background: rgba(255,255,255,0.1); color: white;">
+        <i class="fas fa-file-export"></i> Export Data
+    </a>
+</div>
+
+{% endblock %}

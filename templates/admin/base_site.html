@@ -1,0 +1,122 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* Custom styling for EMS Admin */
+    #header {
+        background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+        color: white;
+        padding: 15px 20px;
+    }
+
+    #branding h1,
+    #branding h1 a:link,
+    #branding h1 a:visited {
+        color: white;
+        font-weight: 600;
+        font-size: 24px;
+    }
+
+    #branding h1 a:hover {
+        color: #fbbf24;
+    }
+
+    .module h2,
+    .module caption,
+    .inline-group h2 {
+        background: #3b82f6;
+        color: white;
+    }
+
+    div.breadcrumbs {
+        background: #1e40af;
+        color: white;
+    }
+
+    div.breadcrumbs a {
+        color: #fbbf24;
+    }
+
+    .button,
+    input[type=submit],
+    input[type=button],
+    .submit-row input,
+    button {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .button:hover,
+    input[type=submit]:hover,
+    input[type=button]:hover {
+        background: #2563eb;
+    }
+
+    .button.default,
+    input[type=submit].default,
+    .submit-row input.default {
+        background: #10b981;
+    }
+
+    .button.default:hover,
+    input[type=submit].default:hover {
+        background: #059669;
+    }
+
+    a:link,
+    a:visited {
+        color: #3b82f6;
+    }
+
+    a:hover {
+        color: #2563eb;
+    }
+
+    #content-main {
+        padding: 20px;
+    }
+
+    .module {
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Increase font size for welcome message and user links */
+    #user-tools {
+        font-size: 16px !important;
+        font-weight: 500;
+        padding: 10px 20px;
+    }
+
+    #user-tools a {
+        font-size: 16px !important;
+        margin: 0 8px;
+    }
+
+    #user-tools strong {
+        font-size: 16px !important;
+    }
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+        🗳️ {{ site_header|default:_('Election Management System Administration') }}
+    </a>
+</h1>
+{% endblock %}
+
+{% block welcome-msg %}
+{% if user.is_authenticated %}
+<strong>Welcome, {{ user.get_username }}</strong> |
+<a href="{% url 'admin:password_change' %}">Change Password</a> |
+<a href="{% url 'admin:logout' %}">Log Out</a>
+{% endif %}
+{% endblock %}

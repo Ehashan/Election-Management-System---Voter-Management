@@ -1,0 +1,102 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block content %}
+<div id="content-main">
+    <div class="module" style="max-width: 800px; margin: 0 auto;">
+        <h2>{{ title }}</h2>
+
+        <form method="post" style="padding: 20px;">
+            {% csrf_token %}
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-row">
+                    <label for="nic" style="display: block; font-weight: bold; margin-bottom: 5px;">NIC / SLIN:</label>
+                    <input type="text" name="nic" id="nic" required
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+
+                <div class="form-row">
+                    <label for="name" style="display: block; font-weight: bold; margin-bottom: 5px;">Full Name:</label>
+                    <input type="text" name="name" id="name" required
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+
+                <div class="form-row">
+                    <label for="email" style="display: block; font-weight: bold; margin-bottom: 5px;">Email:</label>
+                    <input type="email" name="email" id="email"
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+
+                <div class="form-row">
+                    <label for="dob" style="display: block; font-weight: bold; margin-bottom: 5px;">Date of
+                        Birth:</label>
+                    <input type="date" name="dob" id="dob"
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+
+                <div class="form-row">
+                    <label for="gender" style="display: block; font-weight: bold; margin-bottom: 5px;">Gender:</label>
+                    <select name="gender" id="gender"
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label for="admin_district"
+                        style="display: block; font-weight: bold; margin-bottom: 5px;">Administrative District:</label>
+                    <select name="admin_district" id="admin_district" required
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                        <option value="Colombo">Colombo</option>
+                        <option value="Gampaha">Gampaha</option>
+                        <option value="Kalutara">Kalutara</option>
+                        <option value="Kandy">Kandy</option>
+                        <option value="Matale">Matale</option>
+                        <option value="Nuwara Eliya">Nuwara Eliya</option>
+                        <option value="Galle">Galle</option>
+                        <option value="Matara">Matara</option>
+                        <option value="Hambantota">Hambantota</option>
+                        <option value="Jaffna">Jaffna</option>
+                        <option value="Kilinochchi">Kilinochchi</option>
+                        <option value="Mannar">Mannar</option>
+                        <option value="Vavuniya">Vavuniya</option>
+                        <option value="Mullaitivu">Mullaitivu</option>
+                        <option value="Batticaloa">Batticaloa</option>
+                        <option value="Ampara">Ampara</option>
+                        <option value="Trincomalee">Trincomalee</option>
+                        <option value="Kurunegala">Kurunegala</option>
+                        <option value="Puttalam">Puttalam</option>
+                        <option value="Anuradhapura">Anuradhapura</option>
+                        <option value="Polonnaruwa">Polonnaruwa</option>
+                        <option value="Badulla">Badulla</option>
+                        <option value="Monaragala">Monaragala</option>
+                        <option value="Ratnapura">Ratnapura</option>
+                        <option value="Kegalle">Kegalle</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label for="election_district"
+                        style="display: block; font-weight: bold; margin-bottom: 5px;">Election District:</label>
+                    <input type="text" name="election_district" id="election_district"
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+
+                <div class="form-row">
+                    <label for="polling_division" style="display: block; font-weight: bold; margin-bottom: 5px;">Polling
+                        Division:</label>
+                    <input type="text" name="polling_division" id="polling_division"
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+            </div>
+
+            <div class="submit-row" style="margin-top: 20px; text-align: right;">
+                <input type="submit" value="Save Voter" class="default"
+                    style="background: #10b981; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

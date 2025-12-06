@@ -1,0 +1,84 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block content %}
+<style>
+    /* Dark Mode Support */
+    @media (prefers-color-scheme: dark) {
+        .module {
+            background: var(--body-bg);
+            color: var(--body-fg);
+        }
+
+        table {
+            color: var(--body-fg);
+        }
+
+        tr {
+            background: var(--body-bg) !important;
+        }
+
+        th {
+            background: #1e3a8a !important;
+            color: white !important;
+            border-color: #374151 !important;
+        }
+
+        td {
+            border-color: #374151 !important;
+            color: var(--body-fg) !important;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: transparent !important;
+        }
+    }
+</style>
+
+<div id="content-main">
+    <div class="module" style="margin-bottom: 20px;">
+        <h2>{{ title }}</h2>
+
+        <div style="padding: 20px;">
+            <p><strong>Total Signups:</strong> {{ registrations|length }}</p>
+
+            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                <thead>
+                    <tr style="background: #3b82f6; color: white;">
+                        <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">User ID</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">NIC</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Name</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Email</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Mobile</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Verified</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Verified At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reg in registrations %}
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;">{{ reg.user_id }}</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">{{ reg.nic }}</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">{{ reg.name }}</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">{{ reg.email }}</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">{{ reg.mobile_number }}</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">{{ reg.is_mobile_verified }}</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">{{ reg.verified_at }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" style="padding: 20px; text-align: center; color: #666;">
+                            No signup data found
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

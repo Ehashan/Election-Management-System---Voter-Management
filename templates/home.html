@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="text-align: center;">
+    <h2>Welcome to the Future of Voting</h2>
+    <p>Secure. Transparent. Efficient.</p>
+
+    <div style="margin-top: 50px;">
+        <a href="{% url 'voter_signup' %}" class="btn">Sign Up / Sign In as Voter</a>
+        <br><br>
+        <a href="{% url 'admin_login' %}" class="btn btn-secondary">Logging as Admin</a>
+    </div>
+</div>
+{% endblock %}
