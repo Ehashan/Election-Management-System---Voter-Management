@@ -4,3 +4,4 @@ Pillow>=10.0.0
 python-dotenv>=1.0.0
 dnspython>=2.4.0
 qrcode>=8.0
+python-dotenv
