@@ -132,17 +132,13 @@
                 <video id="video" width="320" height="240" autoplay></video>
                 <button type="button" id="snap" class="btn btn-secondary" style="margin: 10px;">📷 Capture
                     Photo</button>
-                <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+                <canvas id="canvas" style="display:none;"></canvas>
                 <img id="photo" alt="Captured Photo" style="display:none; max-width: 320px;">
                 <input type="hidden" name="face_image_data" id="face_image_data">
             </div>
         </div>
 
-        <div class="recaptcha-container">
-            <div style="border: 1px solid #ddd; padding: 10px; background: #f9f9f9; text-align: center;">
-                [ I'm not a robot (reCAPTCHA) ]
-            </div>
-        </div>
+    
 
         <div class="button-group">
             <button type="button" class="btn btn-secondary" onclick="this.form.reset()">🔄 Reset</button>
@@ -158,7 +154,7 @@
     const snap = document.getElementById('snap');
     const faceImageData = document.getElementById('face_image_data');
 
-    navigator.mediaDevices.getUserMedia({ video: true })
+    navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' } })
         .then(function (stream) {
             video.srcObject = stream;
             video.play();
@@ -170,9 +166,11 @@
 
     snap.addEventListener('click', function () {
         const context = canvas.getContext('2d');
-        context.drawImage(video, 0, 0, 320, 240);
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        const data = canvas.toDataURL('image/png');
+        const data = canvas.toDataURL('image/jpeg', 0.92);
         photo.setAttribute('src', data);
         photo.style.display = 'block';
         video.style.display = 'none';

@@ -10,6 +10,35 @@ from pymongo.errors import OperationFailure
 import random
 from datetime import datetime, timedelta
 
+import qrcode
+from io import BytesIO
+import base64
+
+def generate_qr_code(data):
+
+    try:
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=2,
+        )
+        qr.add_data(data)
+        qr.make(fit=True)
+        
+        img = qr.make_image(fill_color="black", back_color="white")
+        
+        # Convert to base64
+        buffer = BytesIO()
+        img.save(buffer, format='PNG')
+        buffer.seek(0)
+        img_str = base64.b64encode(buffer.getvalue()).decode()
+        
+        return img_str
+    except Exception as e:
+        print(f"Error generating QR code: {e}")
+        return None
+
 def home(request):
     return render(request, 'home.html')
 
@@ -62,8 +91,6 @@ def voter_signup(request):
             print(f"DEBUG: Verification Code for {mobile}: {verification_code}")
             print(f"DEBUG: Code expires at: {code_expiry}")
             
-            # In production, send SMS here
-            # send_sms(mobile, f"Your verification code is: {verification_code}")
             
             return redirect('mobile_verification')
     else:
@@ -175,11 +202,11 @@ def admin_login(request):
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            if user.is_staff:
+            if user.is_superuser:
                 login(request, user)
                 return redirect('admin_dashboard')
             else:
-                form.add_error(None, "You are not an admin")
+                form.add_error(None, "Your account does not have admin privileges.")
     else:
         form = AuthenticationForm()
     
@@ -255,9 +282,13 @@ def voter_registration(request):
             print(f"DEBUG: Saved detailed registration to voters collection for user {request.user.id}")
             print(f"DEBUG: Voter ID: {data['voter_id']}")
             
+            # Generate QR code for voter ID
+            qr_code_base64 = generate_qr_code(data['voter_id'])
+            
             return render(request, 'registration_success.html', {
                 'user': request.user,
-                'voter_id': data['voter_id']
+                'voter_id': data['voter_id'],
+                'qr_code': qr_code_base64
             })
     else:
         # Pre-fill form with existing data

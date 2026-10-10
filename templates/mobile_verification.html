@@ -5,15 +5,8 @@
     <h2>Mobile Verification</h2>
     <p style="text-align: center; color: #666;">Please enter the verification code sent to your mobile number.</p>
 
-    <!-- DEBUG: Show code for testing -->
-    {% if debug_code %}
-    <div
-        style="background: #fffacd; border: 2px solid #ffa500; padding: 15px; margin: 20px 0; border-radius: 8px; text-align: center;">
-        <strong>🔍 TEST MODE - Your Verification Code:</strong>
-        <h3 style="color: #ff6600; margin: 10px 0;">{{ debug_code }}</h3>
-        <small style="color: #666;">(In production, this would be sent via SMS)</small>
-    </div>
-    {% endif %}
+    
+    
 
     {% if success %}
     <div class="success" style="text-align: center; margin-bottom: 20px;">{{ success }}</div>
@@ -44,11 +37,6 @@
         </div>
         {% endif %}
 
-        <div class="recaptcha-container">
-            <div class="recaptcha-placeholder">
-                [ I'm not a robot (reCAPTCHA - Test Mode) ]
-            </div>
-        </div>
 
         <div class="button-group">
             <button type="button" class="btn btn-secondary" onclick="this.form.reset()">🔄 Reset</button>
