@@ -4,36 +4,36 @@
 <div class="container" style="text-align: center;">
     <div
         style="background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 30px; border-radius: 12px; margin-bottom: 30px;">
-        <h2 style="color: white; margin-bottom: 20px;">✓ Registration Successful!</h2>
-        <p style="font-size: 1.1rem; margin-bottom: 0;">Welcome to the Election Management System</p>
+        <h2 style="color: white; margin-bottom: 20px;" data-i18n="succ_title">✓ Registration Successful!</h2>
+        <p style="font-size: 1.1rem; margin-bottom: 0;" data-i18n="succ_subtitle">Welcome to the Election Management System</p>
     </div>
 
     <div class="voter-id-display">
-        <h3>Your Unique Voter ID</h3>
+        <h3 data-i18n="succ_voter_id_heading">Your Unique Voter ID</h3>
         <div class="voter-id">{{ voter_id }}</div>
-        <p style="margin-top: 15px; font-size: 0.95rem;">Please save this ID for future reference</p>
+        <p style="margin-top: 15px; font-size: 0.95rem;" data-i18n="succ_save_hint">Please save this ID for future reference</p>
     </div>
 
     <div
         style="background: #f0fdf4; border: 2px solid #10b981; padding: 20px; border-radius: 8px; margin: 30px 0; text-align: left;">
-        <h4 style="color: #059669; margin-bottom: 15px;">✓ Registration Complete</h4>
+        <h4 style="color: #059669; margin-bottom: 15px;" data-i18n="succ_complete">✓ Registration Complete</h4>
         <ul style="color: #065f46; line-height: 2;">
-            <li><strong>Name:</strong> {{ user.first_name }}</li>
-            <li><strong>Email:</strong> {{ user.email }}</li>
-            <li><strong>Voter ID:</strong> {{ voter_id }}</li>
-            <li><strong>Status:</strong> <span style="color: #10b981; font-weight: 600;">Verified & Registered</span>
+            <li><strong data-i18n="succ_name">Name:</strong> {{ user.first_name }}</li>
+            <li><strong data-i18n="succ_email">Email:</strong> {{ user.email }}</li>
+            <li><strong data-i18n="succ_voter_id">Voter ID:</strong> {{ voter_id }}</li>
+            <li><strong data-i18n="succ_status">Status:</strong> <span style="color: #10b981; font-weight: 600;" data-i18n="succ_status_val">Verified & Registered</span>
             </li>
         </ul>
     </div>
 
     <div style="margin-top: 30px;">
-        <a href="{% url 'home' %}" class="btn btn-primary" style="margin: 10px;">🏠 Go to Home</a>
-        <a href="{% url 'voter_registration' %}" class="btn btn-secondary" style="margin: 10px;">📝 View/Edit
+        <a href="{% url 'home' %}" class="btn btn-primary" style="margin: 10px;" data-i18n="succ_go_home">🏠 Go to Home</a>
+        <a href="{% url 'voter_registration' %}" class="btn btn-secondary" style="margin: 10px;" data-i18n="succ_view_reg">📝 View/Edit
             Registration</a>
     </div>
 
     <div style="margin-top: 30px; padding: 20px; background: #fef3c7; border-radius: 8px; border: 1px solid #f59e0b;">
-        <p style="color: #92400e; margin: 0;">
+        <p style="color: #92400e; margin: 0;" data-i18n="succ_important">
             <strong>📌 Important:</strong> Voter has been registered. You can now participate in elections using
             SLIN/NIC.
         </p>

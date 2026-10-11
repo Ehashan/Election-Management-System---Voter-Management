@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
@@ -13,6 +13,10 @@ from datetime import datetime, timedelta
 
 def home(request):
     return render(request, 'home.html')
+
+def user_logout(request):
+    logout(request)
+    return redirect('home')
 
 def voter_signup(request):
     if request.method == 'POST':

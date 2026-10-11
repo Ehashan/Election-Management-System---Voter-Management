@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container">
-    <h2>Sign Up</h2>
+    <h2 data-i18n="signup_title">Sign Up</h2>
     <form method="post">
         {% csrf_token %}
 
@@ -13,7 +13,7 @@
         {% endif %}
 
         <div class="form-group">
-            <label for="id_nic">SLIN / NIC</label>
+            <label for="id_nic" data-i18n="signup_nic_label">SLIN / NIC</label>
             {{ form.nic }}
             {% if form.nic.errors %}
             <div class="error">{{ form.nic.errors }}</div>
@@ -21,7 +21,7 @@
         </div>
 
         <div class="form-group">
-            <label for="id_mobile_number">Registered Mobile No</label>
+            <label for="id_mobile_number" data-i18n="signup_mobile_label">Registered Mobile No</label>
             {{ form.mobile_number }}
             {% if form.mobile_number.errors %}
             <div class="error">{{ form.mobile_number.errors }}</div>
@@ -29,7 +29,7 @@
         </div>
 
         <div class="form-group">
-            <label for="id_name">Name</label>
+            <label for="id_name" data-i18n="signup_name_label">Name</label>
             {{ form.name }}
             {% if form.name.errors %}
             <div class="error">{{ form.name.errors }}</div>
@@ -37,7 +37,7 @@
         </div>
 
         <div class="form-group">
-            <label for="id_email">Email</label>
+            <label for="id_email" data-i18n="signup_email_label">Email</label>
             {{ form.email }}
             {% if form.email.errors %}
             <div class="error">{{ form.email.errors }}</div>
@@ -45,13 +45,13 @@
         </div>
 
         <div class="form-group">
-            <label for="id_username">User Name</label>
+            <label for="id_username" data-i18n="signup_username_label">User Name</label>
             <input type="text" value="{{ form.nic.value|default:'' }}" readonly style="background-color: #e8e8e8;">
-            <small style="color: #666; font-size: 12px;">Username will be your NIC</small>
+            <small style="color: #666; font-size: 12px;" data-i18n="signup_username_hint">Username will be your NIC</small>
         </div>
 
         <div class="form-group">
-            <label for="id_password">Password</label>
+            <label for="id_password" data-i18n="signup_password_label">Password</label>
             {{ form.password }}
             {% if form.password.errors %}
             <div class="error">{{ form.password.errors }}</div>
@@ -59,7 +59,7 @@
         </div>
 
         <div class="form-group">
-            <label for="id_confirm_password">Password (Retype)</label>
+            <label for="id_confirm_password" data-i18n="signup_confirm_label">Password (Retype)</label>
             {{ form.confirm_password }}
             {% if form.confirm_password.errors %}
             <div class="error">{{ form.confirm_password.errors }}</div>
@@ -68,7 +68,7 @@
 
         <div class="checkbox-group">
             {{ form.terms_accepted }}
-            <label for="id_terms_accepted">I accept the <a href="#">Terms of Service</a></label>
+            <label for="id_terms_accepted"><span data-i18n="signup_terms">I accept the Terms of Service</span></label>
             {% if form.terms_accepted.errors %}
             <div class="error">{{ form.terms_accepted.errors }}</div>
             {% endif %}
@@ -81,12 +81,12 @@
         </div>
 
         <div class="text-center">
-            <a href="#">Instructions</a>
+            <a href="#" data-i18n="signup_instructions">Instructions</a>
         </div>
 
         <div class="button-group">
-            <button type="button" class="btn btn-secondary" onclick="this.form.reset()">🔄 Reset</button>
-            <button type="submit" class="btn btn-primary">✓ Sign Up</button>
+            <button type="button" class="btn btn-secondary" onclick="this.form.reset()" data-i18n="btn_reset">🔄 Reset</button>
+            <button type="submit" class="btn btn-primary" data-i18n="btn_signup">✓ Sign Up</button>
         </div>
     </form>
 </div>

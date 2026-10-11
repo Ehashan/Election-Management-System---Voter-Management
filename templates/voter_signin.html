@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container">
-    <h2>Sign In</h2>
+    <h2 data-i18n="signin_title">Sign In</h2>
 
     {% if verification_success %}
     <div class="success" style="text-align: center; margin-bottom: 20px;">
@@ -14,30 +14,30 @@
         {% csrf_token %}
 
         <div class="form-group">
-            <label for="id_username">User Name (SLIN/NIC)</label>
+            <label for="id_username" data-i18n="signin_username_label">User Name (SLIN/NIC)</label>
             {{ form.username }}
         </div>
 
         <div class="form-group">
-            <label for="id_password">Password</label>
+            <label for="id_password" data-i18n="signin_password_label">Password</label>
             {{ form.password }}
         </div>
 
         {% if form.errors %}
-        <div class="error" style="margin-bottom: 15px;">Invalid credentials. Please try again.</div>
+        <div class="error" style="margin-bottom: 15px;" data-i18n="signin_invalid">Invalid credentials. Please try again.</div>
         {% endif %}
 
         <div class="text-center" style="margin: 15px 0;">
-            <a href="#">Forgot password?</a>
+            <a href="#" data-i18n="signin_forgot_pwd">Forgot password?</a>
         </div>
 
         <div class="button-group">
-            <button type="submit" class="btn btn-primary">🔑 Sign In</button>
+            <button type="submit" class="btn btn-primary" data-i18n="signin_btn">🔑 Sign In</button>
         </div>
     </form>
 
     <div class="text-center" style="margin-top: 30px;">
-        <p>Don't have an account? <a href="{% url 'voter_signup' %}">Create New Account (Sign Up)</a></p>
+        <p><span data-i18n="signin_no_account">Don't have an account?</span> <a href="{% url 'voter_signup' %}" data-i18n="signin_create_account">Create New Account (Sign Up)</a></p>
     </div>
 </div>
 {% endblock %}

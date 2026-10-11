@@ -2,25 +2,25 @@
 
 {% block content %}
 <div class="container">
-    <h2>Admin Login</h2>
+    <h2 data-i18n="admin_title">Admin Login</h2>
     <form method="post">
         {% csrf_token %}
 
         <div class="form-group">
-            <label for="id_username">Username</label>
+            <label for="id_username" data-i18n="admin_username">Username</label>
             {{ form.username }}
         </div>
         <div class="form-group">
-            <label for="id_password">Password</label>
+            <label for="id_password" data-i18n="admin_password">Password</label>
             {{ form.password }}
         </div>
 
         {% if form.errors %}
-        <div class="error" style="margin-bottom: 10px;">Invalid credentials</div>
+        <div class="error" style="margin-bottom: 10px;" data-i18n="signin_invalid">Invalid credentials</div>
         {% endif %}
 
         <div style="display: flex; justify-content: flex-end;">
-            <button type="submit" class="btn btn-secondary">Login</button>
+            <button type="submit" class="btn btn-secondary" data-i18n="admin_btn">Login</button>
         </div>
     </form>
 </div>

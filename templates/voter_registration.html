@@ -2,8 +2,8 @@
 
 {% block content %}
 <div class="container" style="max-width: 900px;">
-    <h2>Voter Registration</h2>
-    <p style="text-align: center; color: #666; margin-bottom: 30px;">
+    <h2 data-i18n="vreg_title">Voter Registration</h2>
+    <p style="text-align: center; color: #666; margin-bottom: 30px;" data-i18n="vreg_desc">
         Complete your registration to receive your unique Voter ID
     </p>
 
@@ -17,18 +17,18 @@
         {% endif %}
 
         <div class="form-group">
-            <label for="id_name">Name</label>
+            <label for="id_name" data-i18n="vreg_name_label">Name</label>
             {{ form.name }}
-            <small>You can update your name if needed</small>
+            <small data-i18n="vreg_name_hint">You can update your name if needed</small>
             {% if form.name.errors %}
             <div class="error">{{ form.name.errors }}</div>
             {% endif %}
         </div>
 
         <div class="form-group">
-            <label for="id_nic">SLIN/NIC</label>
+            <label for="id_nic" data-i18n="vreg_nic_label">SLIN/NIC</label>
             {{ form.nic }}
-            <small>You can update your NIC if needed</small>
+            <small data-i18n="vreg_nic_hint">You can update your NIC if needed</small>
             {% if form.nic.errors %}
             <div class="error">{{ form.nic.errors }}</div>
             {% endif %}
@@ -127,22 +127,19 @@
         </div>
 
         <div class="form-group">
-            <label>Face Recognition Image</label>
+            <label data-i18n="vreg_face_title">Face Recognition Image</label>
             <div class="camera-section">
                 <video id="video" width="320" height="240" autoplay></video>
-                <button type="button" id="snap" class="btn btn-secondary" style="margin: 10px;">📷 Capture
-                    Photo</button>
+                <button type="button" id="snap" class="btn btn-secondary" style="margin: 10px;" data-i18n="btn_snap">📷 Capture Photo</button>
                 <canvas id="canvas" style="display:none;"></canvas>
                 <img id="photo" alt="Captured Photo" style="display:none; max-width: 320px;">
                 <input type="hidden" name="face_image_data" id="face_image_data">
             </div>
         </div>
 
-    
-
         <div class="button-group">
-            <button type="button" class="btn btn-secondary" onclick="this.form.reset()">🔄 Reset</button>
-            <button type="submit" class="btn btn-primary">✓ Submit Registration</button>
+            <button type="button" class="btn btn-secondary" onclick="this.form.reset()" data-i18n="btn_reset">🔄 Reset</button>
+            <button type="submit" class="btn btn-primary" data-i18n="btn_submit_reg">✓ Submit Registration</button>
         </div>
     </form>
 </div>
