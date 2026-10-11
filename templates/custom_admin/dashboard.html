@@ -137,12 +137,15 @@
     <h2 class="section-title">Quick Actions</h2>
 </div>
 
-<div style="display: flex; gap: 15px; margin-bottom: 30px;">
-    <a href="{% url 'admin_voter_list' %}" class="btn btn-primary">
-        <i class="fas fa-user-edit"></i> Manage Voters
+<div style="display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap;">
+    <a href="{% url 'admin_add_voter' %}" class="btn btn-primary">
+        <i class="fas fa-user-plus"></i> Add Voter Directly
     </a>
-    <a href="#" class="btn" style="background: rgba(255,255,255,0.1); color: white;">
-        <i class="fas fa-file-export"></i> Export Data
+    <a href="{% url 'admin_voter_list' %}" class="btn" style="background: rgba(0, 243, 255, 0.15); color: var(--primary-color); border: 1px solid var(--primary-color);">
+        <i class="fas fa-users"></i> Manage Voters
+    </a>
+    <a href="{% url 'admin_signup_list' %}" class="btn" style="background: rgba(255,255,255,0.1); color: white;">
+        <i class="fas fa-list"></i> View Signups
     </a>
 </div>
 

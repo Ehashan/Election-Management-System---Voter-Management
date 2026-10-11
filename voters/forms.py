@@ -119,7 +119,7 @@ class VoterRegistrationForm(forms.Form):
     name = forms.CharField(
         max_length=100,
         widget=forms.TextInput(attrs={
-            'placeholder': 'Enter your full name',
+            'placeholder': 'Enter full name',
             'class': 'form-control'
         })
     )
@@ -127,7 +127,24 @@ class VoterRegistrationForm(forms.Form):
         label='SLIN/NIC',
         max_length=20,
         widget=forms.TextInput(attrs={
-            'placeholder': 'Enter your NIC',
+            'placeholder': 'Enter NIC',
+            'class': 'form-control'
+        })
+    )
+    email = forms.EmailField(
+        required=False,
+        label='Email Address',
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'voter@example.com',
+            'class': 'form-control'
+        })
+    )
+    mobile_number = forms.CharField(
+        required=False,
+        label='Mobile Number',
+        max_length=15,
+        widget=forms.TextInput(attrs={
+            'placeholder': '+94XXXXXXXXX or 07XXXXXXXX',
             'class': 'form-control'
         })
     )
@@ -144,8 +161,9 @@ class VoterRegistrationForm(forms.Form):
     )
     election_year = forms.CharField(
         max_length=4,
+        required=False,
         widget=forms.TextInput(attrs={
-            'placeholder': 'e.g., 2025',
+            'placeholder': 'e.g., 2026',
             'class': 'form-control'
         })
     )
@@ -159,6 +177,7 @@ class VoterRegistrationForm(forms.Form):
     )
     polling_division = forms.CharField(
         max_length=50,
+        required=False,
         widget=forms.TextInput(attrs={
             'placeholder': 'Enter polling division',
             'class': 'form-control'
@@ -166,6 +185,7 @@ class VoterRegistrationForm(forms.Form):
     )
     postal_code = forms.CharField(
         max_length=10,
+        required=False,
         widget=forms.TextInput(attrs={
             'placeholder': 'Enter postal code',
             'class': 'form-control'
@@ -173,6 +193,7 @@ class VoterRegistrationForm(forms.Form):
     )
     grama_niladari_division = forms.CharField(
         max_length=100,
+        required=False,
         widget=forms.TextInput(attrs={
             'placeholder': 'Enter Grama Niladari Division',
             'class': 'form-control'
@@ -180,6 +201,7 @@ class VoterRegistrationForm(forms.Form):
     )
     village_street = forms.CharField(
         max_length=100,
+        required=False,
         widget=forms.TextInput(attrs={
             'placeholder': 'Enter village or street',
             'class': 'form-control'
@@ -187,14 +209,22 @@ class VoterRegistrationForm(forms.Form):
     )
     household = forms.CharField(
         max_length=50,
+        required=False,
         widget=forms.TextInput(attrs={
             'placeholder': 'Enter household number',
             'class': 'form-control'
         })
     )
 
+    def clean_election_year(self):
+        year = self.cleaned_data.get('election_year')
+        if not year:
+            from datetime import datetime
+            return str(datetime.now().year)
+        return year.strip()
+
     def clean_date_of_birth(self):
-        dob = self.cleaned_data['date_of_birth']
+        dob = self.cleaned_data.get('date_of_birth')
         if dob:
             from datetime import date
             today = date.today()

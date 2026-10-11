@@ -60,6 +60,7 @@
                 <table style="width: 100%; border-collapse: collapse; margin-top: 20px; min-width: 1200px;">
                     <thead>
                         <tr style="background: #3b82f6; color: white;">
+                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd; width: 60px;">Photo</th>
                             <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Voter ID</th>
                             <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">NIC</th>
                             <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Name</th>
@@ -77,6 +78,13 @@
                     <tbody>
                         {% for voter in voters %}
                         <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">
+                                {% if voter.face_image %}
+                                <img src="{{ voter.face_image }}" alt="Photo" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #3b82f6; display: block; margin: 0 auto;">
+                                {% else %}
+                                <span style="font-size: 1.5rem; color: #9ca3af;">👤</span>
+                                {% endif %}
+                            </td>
                             <td style="padding: 10px; border: 1px solid #ddd; font-weight: 600;">
                                 <a href="{% url 'admin:voters_voterproxy_change' voter.voter_id %}"
                                     style="color: #3b82f6; text-decoration: none;">
@@ -85,7 +93,7 @@
                             </td>
                             <td style="padding: 10px; border: 1px solid #ddd;">{{ voter.nic }}</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">{{ voter.name }}</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">{{ voter.email }}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">{{ voter.email|default:"N/A" }}</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">{{ voter.date_of_birth }}</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">{{ voter.gender }}</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">{{ voter.admin_district }}</td>
@@ -107,7 +115,7 @@
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="12" style="padding: 20px; text-align: center; color: #666;">
+                            <td colspan="13" style="padding: 20px; text-align: center; color: #666;">
                                 No voter registration data found
                             </td>
                         </tr>

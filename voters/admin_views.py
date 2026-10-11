@@ -62,36 +62,65 @@ def admin_voter_list(request):
     }
     return render(request, 'custom_admin/voter_list.html', context)
 
+def _extract_image(request):
+    """Helper to extract face image from webcam base64 or uploaded file"""
+    img_data = request.POST.get('face_image_data')
+    if img_data and img_data.strip():
+        return img_data.strip()
+    if request.FILES.get('face_image_file'):
+        import base64
+        uploaded_file = request.FILES.get('face_image_file')
+        content = uploaded_file.read()
+        b64 = base64.b64encode(content).decode('utf-8')
+        mime = uploaded_file.content_type or 'image/jpeg'
+        return f"data:{mime};base64,{b64}"
+    return None
+
 @admin_required
 def admin_add_voter(request):
     """
-    Add a new voter manually.
+    Add a new voter manually directly by admin without requiring prior user registration.
     """
     from .forms import VoterRegistrationForm
     
     if request.method == 'POST':
-        form = VoterRegistrationForm(request.POST)
+        form = VoterRegistrationForm(request.POST, request.FILES)
         if form.is_valid():
             data = form.cleaned_data
+            db = get_db()
+            
+            # Check if a voter with this NIC already exists
+            existing_voter = db.voters.find_one({'nic': data.get('nic')})
+            if existing_voter:
+                form.add_error('nic', f"A voter with NIC {data.get('nic')} is already registered (Voter ID: {existing_voter.get('voter_id')}).")
+                context = {
+                    'form': form,
+                    'title': 'Add New Voter'
+                }
+                return render(request, 'custom_admin/voter_form.html', context)
             
             # Generate Voter ID
             admin_district = data.get('admin_district')
             election_year = data.get('election_year')
-            voter_id = generate_voter_id(admin_district, int(election_year))
+            voter_id = generate_voter_id(admin_district, election_year)
             
             data['voter_id'] = voter_id
             data['registered_at'] = datetime.now()
             data['registration_status'] = 'Verified' # Admin added is verified by default
-            data['user_id'] = None # No linked user account for manually added voters
+            data['user_id'] = None # Added directly by admin without prior user account
+            
+            # Handle Face Image
+            face_img = _extract_image(request)
+            if face_img:
+                data['face_image'] = face_img
             
             # Convert date to string
             if data.get('date_of_birth'):
                 data['date_of_birth'] = data['date_of_birth'].isoformat()
             
-            db = get_db()
             try:
                 db.voters.insert_one(data)
-                messages.success(request, f'Voter added successfully with ID: {voter_id}')
+                messages.success(request, f'Voter {data.get("name")} added successfully with ID: {voter_id}')
                 return redirect('admin_voter_list')
             except Exception as e:
                 messages.error(request, f'Error adding voter: {str(e)}')
@@ -119,7 +148,7 @@ def admin_edit_voter(request, voter_id):
         return redirect('admin_voter_list')
     
     if request.method == 'POST':
-        form = VoterRegistrationForm(request.POST)
+        form = VoterRegistrationForm(request.POST, request.FILES)
         if form.is_valid():
             data = form.cleaned_data
             
@@ -127,7 +156,18 @@ def admin_edit_voter(request, voter_id):
             data['voter_id'] = voter_id
             data['user_id'] = voter.get('user_id')
             data['registered_at'] = voter.get('registered_at')
-            data['registration_status'] = voter.get('registration_status')
+            status = request.POST.get('registration_status')
+            if status:
+                data['registration_status'] = status
+            else:
+                data['registration_status'] = voter.get('registration_status', 'Verified')
+            
+            # Handle Face Image (update if new provided, otherwise keep existing)
+            new_image = _extract_image(request)
+            if new_image:
+                data['face_image'] = new_image
+            elif voter.get('face_image'):
+                data['face_image'] = voter.get('face_image')
             
             # Convert date
             if data.get('date_of_birth'):
@@ -154,6 +194,8 @@ def admin_edit_voter(request, voter_id):
         'form': form,
         'title': f'Edit Voter: {voter_id}',
         'voter_id': voter_id,
+        'current_image': voter.get('face_image'),
+        'current_status': voter.get('registration_status', 'Verified'),
         'is_edit': True
     }
     return render(request, 'custom_admin/voter_form.html', context)

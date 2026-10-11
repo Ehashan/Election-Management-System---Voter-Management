@@ -3,6 +3,11 @@ from django.conf import settings
 from datetime import datetime
 
 def get_db():
+    try:
+        import dns.resolver
+        dns.resolver.get_default_resolver().nameservers = ['8.8.8.8', '1.1.1.1']
+    except Exception:
+        pass
     client = MongoClient(settings.MONGO_URI)
     db = client[settings.MONGO_DB_NAME]
     return db
@@ -27,6 +32,11 @@ def generate_voter_id(district, year=None):
     """
     if year is None:
         year = datetime.now().year
+    else:
+        try:
+            year = int(year)
+        except (ValueError, TypeError):
+            year = datetime.now().year
     
     district_code = DISTRICT_CODES.get(district, 'UNK')
     db = get_db()

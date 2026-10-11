@@ -2,53 +2,204 @@
 {% load i18n static %}
 
 {% block content %}
-<div id="content-main">
-    <div class="module" style="max-width: 800px; margin: 0 auto;">
-        <h2>{{ title }}</h2>
+<style>
+    .admin-form-card {
+        max-width: 850px;
+        margin: 20px auto;
+        background: var(--body-bg, #fff);
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--hairline-color, #e5e7eb);
+    }
 
-        <form method="post" style="padding: 20px;">
+    .form-grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+    }
+
+    .form-field-full {
+        grid-column: 1 / -1;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: var(--body-fg, #374151);
+        font-size: 0.95rem;
+    }
+
+    .input-box {
+        width: 100%;
+        padding: 9px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-size: 0.95rem;
+        background: var(--body-bg, #fff);
+        color: var(--body-fg, #111827);
+    }
+
+    .input-box:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    /* Image Upload Section */
+    .image-card {
+        border: 1px solid #93c5fd;
+        background: rgba(59, 130, 246, 0.04);
+        border-radius: 8px;
+        padding: 18px;
+        margin-bottom: 22px;
+    }
+
+    .image-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        align-items: start;
+    }
+
+    @media (max-width: 700px) {
+        .form-grid-2, .image-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .preview-container {
+        text-align: center;
+        background: rgba(0, 0, 0, 0.03);
+        border: 1px dashed #cbd5e1;
+        border-radius: 6px;
+        padding: 12px;
+        min-height: 180px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #photo-preview-admin {
+        max-width: 180px;
+        max-height: 180px;
+        border-radius: 6px;
+        border: 2px solid #3b82f6;
+        object-fit: cover;
+    }
+
+    .btn-action {
+        padding: 8px 15px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+</style>
+
+<div id="content-main">
+    <div class="admin-form-card">
+        <h2 style="margin-top: 0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #e5e7eb; color: var(--body-fg, #111827);">
+            {{ title }}
+        </h2>
+
+        <form method="post" enctype="multipart/form-data" style="margin-top: 15px;">
             {% csrf_token %}
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div class="form-row">
-                    <label for="nic" style="display: block; font-weight: bold; margin-bottom: 5px;">NIC / SLIN:</label>
-                    <input type="text" name="nic" id="nic" required
-                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+            <!-- Image Section -->
+            <div class="image-card">
+                <label class="form-label" style="color: #1d4ed8; font-size: 1.05rem;">
+                    📷 Voter Face Recognition Photo
+                </label>
+                <p style="font-size: 0.85rem; color: #64748b; margin-top: 0; margin-bottom: 15px;">
+                    Upload an image file from your device or use the live webcam to capture the voter's face photo.
+                </p>
+
+                <div class="image-grid">
+                    <div>
+                        <!-- File Upload Option -->
+                        <div style="margin-bottom: 15px;">
+                            <label class="form-label" for="face_image_file">Upload Image File:</label>
+                            <input type="file" name="face_image_file" id="face_image_file" accept="image/*" class="input-box" onchange="previewFile(event)">
+                        </div>
+
+                        <!-- Webcam Option -->
+                        <div style="border-top: 1px solid #e2e8f0; padding-top: 12px;">
+                            <label class="form-label">Or Capture with Camera:</label>
+                            <video id="webcam-video" width="220" height="165" autoplay playsinline style="display:none; border-radius: 6px; border: 1px solid #3b82f6; margin-bottom: 8px;"></video>
+                            <canvas id="webcam-canvas" style="display:none;"></canvas>
+                            <div>
+                                <button type="button" id="start-cam-btn" class="btn-action" style="background: #3b82f6; color: white;" onclick="startWebcam()">
+                                    📷 Open Camera
+                                </button>
+                                <button type="button" id="snap-cam-btn" class="btn-action" style="background: #10b981; color: white; display: none; margin-left: 5px;" onclick="snapPhoto()">
+                                    ✓ Capture
+                                </button>
+                                <button type="button" id="stop-cam-btn" class="btn-action" style="background: #ef4444; color: white; display: none; margin-left: 5px;" onclick="stopWebcam()">
+                                    ✕ Stop
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Preview -->
+                    <div class="preview-container">
+                        <img id="photo-preview-admin" src="" alt="Voter Photo Preview" style="display: none;">
+                        <div id="no-photo-admin" style="color: #94a3b8; font-size: 0.9rem;">
+                            <span style="font-size: 3rem; display: block;">👤</span>
+                            No photo attached yet
+                        </div>
+                        <button type="button" id="clear-btn-admin" class="btn-action" style="display: none; margin-top: 10px; background: #ef4444; color: white; font-size: 0.8rem;" onclick="clearAdminPhoto()">
+                            Remove Photo
+                        </button>
+                    </div>
                 </div>
 
-                <div class="form-row">
-                    <label for="name" style="display: block; font-weight: bold; margin-bottom: 5px;">Full Name:</label>
-                    <input type="text" name="name" id="name" required
-                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <input type="hidden" name="face_image_data" id="face_image_data" value="">
+            </div>
+
+            <!-- Voter Detail Fields -->
+            <div class="form-grid-2">
+                <div>
+                    <label class="form-label" for="nic">NIC / SLIN *</label>
+                    <input type="text" name="nic" id="nic" required class="input-box" placeholder="e.g. 200012345678 or 123456789V">
                 </div>
 
-                <div class="form-row">
-                    <label for="email" style="display: block; font-weight: bold; margin-bottom: 5px;">Email:</label>
-                    <input type="email" name="email" id="email"
-                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <div>
+                    <label class="form-label" for="name">Full Name *</label>
+                    <input type="text" name="name" id="name" required class="input-box" placeholder="Full Name">
                 </div>
 
-                <div class="form-row">
-                    <label for="dob" style="display: block; font-weight: bold; margin-bottom: 5px;">Date of
-                        Birth:</label>
-                    <input type="date" name="dob" id="dob"
-                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <div>
+                    <label class="form-label" for="email">Email Address</label>
+                    <input type="email" name="email" id="email" class="input-box" placeholder="voter@example.com">
                 </div>
 
-                <div class="form-row">
-                    <label for="gender" style="display: block; font-weight: bold; margin-bottom: 5px;">Gender:</label>
-                    <select name="gender" id="gender"
-                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <div>
+                    <label class="form-label" for="dob">Date of Birth *</label>
+                    <input type="date" name="dob" id="dob" required class="input-box">
+                </div>
+
+                <div>
+                    <label class="form-label" for="gender">Gender *</label>
+                    <select name="gender" id="gender" class="input-box">
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                     </select>
                 </div>
 
-                <div class="form-row">
-                    <label for="admin_district"
-                        style="display: block; font-weight: bold; margin-bottom: 5px;">Administrative District:</label>
-                    <select name="admin_district" id="admin_district" required
-                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <div>
+                    <label class="form-label" for="election_year">Election Year</label>
+                    <input type="text" name="election_year" id="election_year" class="input-box" placeholder="2026">
+                </div>
+
+                <div>
+                    <label class="form-label" for="admin_district">Administrative District *</label>
+                    <select name="admin_district" id="admin_district" required class="input-box">
                         <option value="Colombo">Colombo</option>
                         <option value="Gampaha">Gampaha</option>
                         <option value="Kalutara">Kalutara</option>
@@ -77,26 +228,124 @@
                     </select>
                 </div>
 
-                <div class="form-row">
-                    <label for="election_district"
-                        style="display: block; font-weight: bold; margin-bottom: 5px;">Election District:</label>
-                    <input type="text" name="election_district" id="election_district"
-                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <div>
+                    <label class="form-label" for="election_district">Election District</label>
+                    <input type="text" name="election_district" id="election_district" class="input-box" placeholder="e.g. Colombo">
                 </div>
 
-                <div class="form-row">
-                    <label for="polling_division" style="display: block; font-weight: bold; margin-bottom: 5px;">Polling
-                        Division:</label>
-                    <input type="text" name="polling_division" id="polling_division"
-                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <div>
+                    <label class="form-label" for="polling_division">Polling Division</label>
+                    <input type="text" name="polling_division" id="polling_division" class="input-box" placeholder="Polling Division">
+                </div>
+
+                <div>
+                    <label class="form-label" for="postal_code">Postal Code</label>
+                    <input type="text" name="postal_code" id="postal_code" class="input-box" placeholder="Postal Code">
+                </div>
+
+                <div>
+                    <label class="form-label" for="grama_niladari_division">Grama Niladari Division</label>
+                    <input type="text" name="grama_niladari_division" id="grama_niladari_division" class="input-box" placeholder="GN Division">
+                </div>
+
+                <div>
+                    <label class="form-label" for="village_street">Village / Street</label>
+                    <input type="text" name="village_street" id="village_street" class="input-box" placeholder="Village / Street">
+                </div>
+
+                <div>
+                    <label class="form-label" for="household">Household Number</label>
+                    <input type="text" name="household" id="household" class="input-box" placeholder="Household No.">
                 </div>
             </div>
 
-            <div class="submit-row" style="margin-top: 20px; text-align: right;">
-                <input type="submit" value="Save Voter" class="default"
-                    style="background: #10b981; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
+            <div class="submit-row" style="margin-top: 25px; text-align: right; border-top: 1px solid #e5e7eb; padding-top: 15px;">
+                <a href="{% url 'admin:voters_voterproxy_changelist' %}" style="margin-right: 15px; color: #6b7280; text-decoration: none;">Cancel</a>
+                <input type="submit" value="Save Voter Directly" class="default"
+                    style="background: #10b981; color: white; padding: 10px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.95rem;">
             </div>
         </form>
     </div>
 </div>
+
+<script>
+    let streamAdmin = null;
+
+    function previewFile(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            setAdminPhoto(e.target.result);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function startWebcam() {
+        const video = document.getElementById('webcam-video');
+        const startBtn = document.getElementById('start-cam-btn');
+        const snapBtn = document.getElementById('snap-cam-btn');
+        const stopBtn = document.getElementById('stop-cam-btn');
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function(stream) {
+                    streamAdmin = stream;
+                    video.srcObject = stream;
+                    video.style.display = 'block';
+                    startBtn.style.display = 'none';
+                    snapBtn.style.display = 'inline-block';
+                    stopBtn.style.display = 'inline-block';
+                })
+                .catch(function(err) {
+                    alert('Camera could not be accessed: ' + err.message);
+                });
+        }
+    }
+
+    function snapPhoto() {
+        const video = document.getElementById('webcam-video');
+        const canvas = document.getElementById('webcam-canvas');
+        if (!video || !streamAdmin) return;
+
+        canvas.width = video.videoWidth || 640;
+        canvas.height = video.videoHeight || 480;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+        setAdminPhoto(dataUrl);
+        stopWebcam();
+    }
+
+    function stopWebcam() {
+        if (streamAdmin) {
+            streamAdmin.getTracks().forEach(track => track.stop());
+            streamAdmin = null;
+        }
+        document.getElementById('webcam-video').style.display = 'none';
+        document.getElementById('start-cam-btn').style.display = 'inline-block';
+        document.getElementById('snap-cam-btn').style.display = 'none';
+        document.getElementById('stop-cam-btn').style.display = 'none';
+    }
+
+    function setAdminPhoto(dataUrl) {
+        document.getElementById('photo-preview-admin').src = dataUrl;
+        document.getElementById('photo-preview-admin').style.display = 'block';
+        document.getElementById('no-photo-admin').style.display = 'none';
+        document.getElementById('clear-btn-admin').style.display = 'inline-block';
+        document.getElementById('face_image_data').value = dataUrl;
+    }
+
+    function clearAdminPhoto() {
+        document.getElementById('photo-preview-admin').src = '';
+        document.getElementById('photo-preview-admin').style.display = 'none';
+        document.getElementById('no-photo-admin').style.display = 'block';
+        document.getElementById('clear-btn-admin').style.display = 'none';
+        document.getElementById('face_image_data').value = '';
+        const fileInput = document.getElementById('face_image_file');
+        if (fileInput) fileInput.value = '';
+    }
+</script>
 {% endblock %}

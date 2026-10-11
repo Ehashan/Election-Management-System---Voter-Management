@@ -133,6 +133,7 @@
         <table>
             <thead>
                 <tr>
+                    <th>Photo</th>
                     <th>Voter ID</th>
                     <th>Name</th>
                     <th>NIC</th>
@@ -144,11 +145,20 @@
             <tbody>
                 {% for voter in voters %}
                 <tr>
+                    <td style="width: 60px; text-align: center;">
+                        {% if voter.face_image %}
+                        <img src="{{ voter.face_image }}" alt="{{ voter.name }}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-color); display: block; margin: 0 auto;">
+                        {% else %}
+                        <div style="width: 42px; height: 42px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); display: flex; align-items: center; justify-content: center; color: var(--text-muted); margin: 0 auto;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        {% endif %}
+                    </td>
                     <td style="font-family: 'Orbitron', sans-serif; color: var(--primary-color);">{{ voter.voter_id }}
                     </td>
                     <td>
                         <div style="font-weight: 500;">{{ voter.name }}</div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted);">{{ voter.email }}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">{{ voter.email|default:"No email" }}</div>
                     </td>
                     <td>{{ voter.nic }}</td>
                     <td>{{ voter.admin_district }}</td>
@@ -166,7 +176,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                    <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);">
                         <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
                         No voters found matching your search.
                     </td>

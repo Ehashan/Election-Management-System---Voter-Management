@@ -177,6 +177,7 @@ class VoterAdmin(admin.ModelAdmin):
                 'nic': voter.get('nic'),
                 'name': voter.get('name'),
                 'email': voter.get('email'),
+                'face_image': voter.get('face_image') or voter.get('face_image_data'),
                 'date_of_birth': voter.get('date_of_birth', 'N/A'),
                 'gender': voter.get('gender', 'N/A'),
                 'admin_district': voter.get('admin_district', 'N/A'),
@@ -203,25 +204,53 @@ class VoterAdmin(admin.ModelAdmin):
             
             if nic and name and district:
                 try:
-                    # Generate Voter ID
-                    voter_id = generate_voter_id(district)
-                    
                     db = get_db()
-                    db.voters.insert_one({
+                    existing_voter = db.voters.find_one({'nic': nic})
+                    if existing_voter:
+                        messages.error(request, f"Voter with NIC {nic} already exists (ID: {existing_voter.get('voter_id')}).")
+                        context = {
+                            **self.admin_site.each_context(request),
+                            'title': 'Add New Voter',
+                            'opts': self.model._meta,
+                            'has_view_permission': True,
+                        }
+                        return render(request, 'admin/add_voter.html', context)
+
+                    # Generate Voter ID
+                    election_year = request.POST.get('election_year')
+                    voter_id = generate_voter_id(district, election_year)
+                    
+                    # Handle Face Image
+                    img_data = request.POST.get('face_image_data')
+                    if not img_data and request.FILES.get('face_image_file'):
+                        import base64
+                        f = request.FILES.get('face_image_file')
+                        b64 = base64.b64encode(f.read()).decode('utf-8')
+                        mime = f.content_type or 'image/jpeg'
+                        img_data = f"data:{mime};base64,{b64}"
+                    
+                    voter_doc = {
                         'voter_id': voter_id,
                         'nic': nic,
                         'name': name,
                         'email': request.POST.get('email'),
                         'date_of_birth': request.POST.get('dob'),
                         'gender': request.POST.get('gender'),
+                        'election_year': election_year or str(datetime.now().year),
                         'admin_district': district,
                         'election_district': request.POST.get('election_district'),
                         'polling_division': request.POST.get('polling_division'),
-                        'registration_status': 'Verified', # Admin added
+                        'postal_code': request.POST.get('postal_code'),
+                        'grama_niladari_division': request.POST.get('grama_niladari_division'),
+                        'village_street': request.POST.get('village_street'),
+                        'household': request.POST.get('household'),
+                        'registration_status': 'Verified', # Admin added directly
                         'registered_at': datetime.now(),
-                        'face_image_data': None,
-                        'user_id': None # Admin added, no linked user account yet
-                    })
+                        'face_image': img_data,
+                        'face_image_data': img_data,
+                        'user_id': None # Added directly by admin without prior registration
+                    }
+                    db.voters.insert_one(voter_doc)
                     messages.success(request, f'Voter {name} added successfully with ID {voter_id}.')
                     return redirect('admin:voters_voterproxy_changelist')
                 except Exception as e:
@@ -253,11 +282,29 @@ class VoterAdmin(admin.ModelAdmin):
                     'email': request.POST.get('email'),
                     'date_of_birth': request.POST.get('dob'),
                     'gender': request.POST.get('gender'),
+                    'election_year': request.POST.get('election_year'),
                     'admin_district': request.POST.get('admin_district'),
                     'election_district': request.POST.get('election_district'),
                     'polling_division': request.POST.get('polling_division'),
+                    'postal_code': request.POST.get('postal_code'),
+                    'grama_niladari_division': request.POST.get('grama_niladari_division'),
+                    'village_street': request.POST.get('village_street'),
+                    'household': request.POST.get('household'),
                     'registration_status': request.POST.get('registration_status'),
                 }
+                
+                # Check for image update
+                img_data = request.POST.get('face_image_data')
+                if not img_data and request.FILES.get('face_image_file'):
+                    import base64
+                    f = request.FILES.get('face_image_file')
+                    b64 = base64.b64encode(f.read()).decode('utf-8')
+                    mime = f.content_type or 'image/jpeg'
+                    img_data = f"data:{mime};base64,{b64}"
+                
+                if img_data:
+                    update_data['face_image'] = img_data
+                    update_data['face_image_data'] = img_data
                 
                 db.voters.update_one({'voter_id': object_id}, {'$set': update_data})
                 messages.success(request, f'Voter {object_id} updated successfully.')
@@ -269,6 +316,7 @@ class VoterAdmin(admin.ModelAdmin):
             **self.admin_site.each_context(request),
             'title': f'Change Voter: {object_id}',
             'voter': voter,
+            'current_image': voter.get('face_image') or voter.get('face_image_data'),
             'opts': self.model._meta,
             'has_change_permission': True,
             'original': voter,
