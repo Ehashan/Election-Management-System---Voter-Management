@@ -294,3 +294,106 @@ def voter_registration(request):
         'user': request.user,
         'profile': profile_data
     })
+
+
+# ===== Informational Nav Pages =====
+from .stats import get_public_stats
+
+def citizens_page(request):
+    return render(request, 'citizens.html')
+
+def officers_page(request):
+    polling_system_url = getattr(settings, 'POLLING_SYSTEM_URL', 'http://127.0.0.1:8001/')
+    return render(request, 'officers.html', {'polling_system_url': polling_system_url})
+
+def parties_page(request):
+    """
+    Political Parties & Candidates portal.
+    """
+    return render(request, 'parties.html')
+
+def services_page(request):
+    return render(request, 'services.html')
+
+def check_status(request):
+    """
+    Check voter registration status using NIC.
+    Displays ONLY status ("Not found", "Pending approval", "Approved")
+    and registration date. Never exposes any other personal data.
+    Rate limited to 5 attempts per minute per IP using Django cache.
+    """
+    from django.core.cache import cache
+    import re
+
+    # Client IP extraction
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        client_ip = x_forwarded_for.split(',')[0].strip()
+    else:
+        client_ip = request.META.get('REMOTE_ADDR', '') or '127.0.0.1'
+
+    rate_cache_key = f"rate_limit_check_status_{client_ip}"
+
+    status_result = None
+    registration_date = None
+    rate_limited = False
+    searched_nic = None
+    error_message = None
+
+    nic_input = (request.POST.get('nic') or request.GET.get('nic', '')).strip().upper()
+
+    if nic_input:
+        searched_nic = nic_input
+        # Check rate limit (5 attempts per minute per IP)
+        attempts = cache.get(rate_cache_key)
+        if attempts is not None and attempts >= 5:
+            rate_limited = True
+            error_message = "Too many attempts. You are limited to 5 verification attempts per minute. Please try again later."
+        else:
+            # Increment attempt counter
+            if attempts is None:
+                cache.set(rate_cache_key, 1, timeout=60)
+            else:
+                cache.set(rate_cache_key, attempts + 1, timeout=60)
+
+            # Query database
+            try:
+                db = get_db()
+                voter = db.voters.find_one({'nic': {'$regex': f'^{re.escape(nic_input)}$', '$options': 'i'}})
+
+                if voter:
+                    raw_status = (voter.get('registration_status') or '').strip().lower()
+                    if raw_status in ('verified', 'approved'):
+                        status_result = "Approved"
+                    else:
+                        status_result = "Pending approval"
+
+                    # Format registration date
+                    reg_dt = voter.get('registered_at')
+                    if isinstance(reg_dt, datetime):
+                        registration_date = reg_dt.strftime('%B %d, %Y')
+                    elif isinstance(reg_dt, str) and reg_dt:
+                        try:
+                            registration_date = datetime.fromisoformat(reg_dt).strftime('%B %d, %Y')
+                        except Exception:
+                            registration_date = reg_dt[:10]
+                    else:
+                        registration_date = "Recorded in Registry"
+                else:
+                    status_result = "Not found"
+            except Exception:
+                status_result = "Not found"
+    elif request.method == 'POST':
+        error_message = "Please enter an NIC number."
+
+    context = {
+        'status_result': status_result,
+        'registration_date': registration_date,
+        'rate_limited': rate_limited,
+        'searched_nic': searched_nic,
+        'error_message': error_message,
+    }
+    return render(request, 'check_status.html', context)
+
+
+

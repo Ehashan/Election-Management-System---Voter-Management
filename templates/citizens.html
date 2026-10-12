@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="home-hero-section citizens-hero-wrapper">
+    <div class="hero-bg-layer" aria-hidden="true"></div>
+    <div class="hero-overlay-layer" aria-hidden="true"></div>
+
+    <div class="voting-modal-card citizens-content-card">
+        <!-- 1. Hero Section -->
+        <div class="modal-badge">
+            <span class="badge-dot"></span>
+            <span data-i18n="citizen_hero_badge">Citizen Services</span>
+        </div>
+
+        <h1 class="modal-title citizens-title" data-i18n="citizen_hero_title">Citizen Services - Register to vote securely</h1>
+        <p class="modal-subtitle citizens-subtitle" data-i18n="citizen_hero_subtitle">
+            Your official portal for democratic participation in Sri Lanka. Follow 4 simple steps to get registered and exercise your right to vote.
+        </p>
+
+        <!-- 4. Three Action Buttons -->
+        <div class="modal-actions citizen-hero-actions">
+            <a href="{% url 'voter_signup' %}" class="btn btn-hero-primary" data-i18n="citizen_btn_signup"> Sign Up</a>
+            <a href="{% url 'voter_signin' %}" class="btn btn-hero-secondary" data-i18n="citizen_btn_signin"> Sign In</a>
+            <a href="{% url 'voter_registration' %}" class="btn btn-hero-accent" data-i18n="citizen_btn_vreg"> Register as Voter</a>
+        </div> 
+
+        <!-- 2. "How it works" - 4 Numbered Step Cards -->
+        <div class="section-divider"></div>
+        <div class="citizens-section-header">
+            <h2 class="section-heading" data-i18n="citizen_how_it_works_title">How It Works</h2>
+            <p class="section-subheading" data-i18n="citizen_how_it_works_subtitle">Registering as an eligible voter online is fast, secure, and transparent.</p>
+        </div>
+
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-badge" data-i18n="citizen_step1_num">01</div>
+                <div class="step-icon"></div>
+                <h3 class="step-title" data-i18n="citizen_step1_title">Create Account</h3>
+                <p class="step-description" data-i18n="citizen_step1_desc">
+                    Create an account with your valid National Identity Card (NIC) and registered mobile number.
+                </p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-badge" data-i18n="citizen_step2_num">02</div>
+                <div class="step-icon"></div>
+                <h3 class="step-title" data-i18n="citizen_step2_title">Verify Mobile</h3>
+                <p class="step-description" data-i18n="citizen_step2_desc">
+                    Verify your mobile number with a secure One-Time Password (OTP) verification code.
+                </p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-badge" data-i18n="citizen_step3_num">03</div>
+                <div class="step-icon"></div>
+                <h3 class="step-title" data-i18n="citizen_step3_title">Complete Registration</h3>
+                <p class="step-description" data-i18n="citizen_step3_desc">
+                    Complete voter registration with electoral division details and live webcam face photo.
+                </p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-badge" data-i18n="citizen_step4_num">04</div>
+                <div class="step-icon"></div>
+                <h3 class="step-title" data-i18n="citizen_step4_title">Approval & Voting</h3>
+                <p class="step-description" data-i18n="citizen_step4_desc">
+                    Wait for admin approval, then vote at your assigned polling station with biometric face verification.
+                </p>
+            </div>
+        </div>
+
+        <!-- 3. "What you need" List -->
+        <div class="section-divider"></div>
+        <div class="citizens-section-header">
+            <h2 class="section-heading" data-i18n="citizen_need_title">What You Need to Register</h2>
+            <p class="section-subheading" data-i18n="citizen_need_subtitle">Please have the following items ready before starting your registration:</p>
+        </div>
+
+        <div class="requirements-grid">
+            <div class="requirement-item">
+                <div class="req-icon-box"></div>
+                <div class="req-content">
+                    <h4 data-i18n="citizen_need_nic_title">Valid NIC / SLIN</h4>
+                    <p data-i18n="citizen_need_nic_desc">Sri Lankan National Identity Card (Old 9-digit+V or New 12-digit format).</p>
+                </div>
+            </div>
+
+            <div class="requirement-item">
+                <div class="req-icon-box"></div>
+                <div class="req-content">
+                    <h4 data-i18n="citizen_need_mobile_title">Active Mobile Number</h4>
+                    <p data-i18n="citizen_need_mobile_desc">A working Sri Lankan mobile number to receive the 6-digit SMS verification code.</p>
+                </div>
+            </div>
+
+            <div class="requirement-item">
+                <div class="req-icon-box"></div>
+                <div class="req-content">
+                    <h4 data-i18n="citizen_need_camera_title">Working Camera</h4>
+                    <p data-i18n="citizen_need_camera_desc">Webcam or mobile device camera with adequate lighting for live facial capture.</p>
+                </div>
+            </div>
+
+            <div class="requirement-item">
+                <div class="req-icon-box"></div>
+                <div class="req-content">
+                    <h4 data-i18n="citizen_need_address_title">Address & GN Division</h4>
+                    <p data-i18n="citizen_need_address_desc">Your current residential street, postal code, and Grama Niladari (GN) division.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Short FAQ Section (<details> elements) -->
+        <div class="section-divider"></div>
+        <div class="citizens-section-header">
+            <h2 class="section-heading" data-i18n="citizen_faq_title">Frequently Asked Questions</h2>
+            <p class="section-subheading" data-i18n="citizen_faq_subtitle">Find quick answers regarding registration, verification, and privacy.</p>
+        </div>
+
+        <div class="faq-accordion">
+            <details class="faq-item" open>
+                <summary class="faq-summary">
+                    <span class="faq-question" data-i18n="citizen_faq_q1">Why is my face captured during registration?</span>
+                    <span class="faq-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <div class="faq-answer">
+                    <p data-i18n="citizen_faq_a1">
+                        Your live face photo is captured to prevent voter impersonation and ensure that only you can cast your vote. On election day, your identity is verified at the polling booth using biometric facial verification against this secure record.
+                    </p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-summary">
+                    <span class="faq-question" data-i18n="citizen_faq_q2">How long does approval take?</span>
+                    <span class="faq-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <div class="faq-answer">
+                    <p data-i18n="citizen_faq_a2">
+                        Voter registrations are reviewed and verified by district election officials typically within 1 to 3 business days after address and GN division verification.
+                    </p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-summary">
+                    <span class="faq-question" data-i18n="citizen_faq_q3">What if my photo is rejected?</span>
+                    <span class="faq-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <div class="faq-answer">
+                    <p data-i18n="citizen_faq_a3">
+                        If your photograph is blurry, obstructed, or lacks proper lighting, your profile will remain in 'Pending' status. You can simply sign in to your voter account and capture a clearer photo using the retake tool.
+                    </p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-summary">
+                    <span class="faq-question" data-i18n="citizen_faq_q4">Who is eligible to register as a voter in Sri Lanka?</span>
+                    <span class="faq-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <div class="faq-answer">
+                    <p data-i18n="citizen_faq_a4">
+                        Any citizen of Sri Lanka who is 18 years of age or older on the qualifying date, of sound mind, and not disqualified by law is legally eligible to register.
+                    </p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-summary">
+                    <span class="faq-question" data-i18n="citizen_faq_q5">Can I update my address or polling division later?</span>
+                    <span class="faq-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <div class="faq-answer">
+                    <p data-i18n="citizen_faq_a5">
+                        Yes. You can sign in and update your residential address, administrative district, and Grama Niladari division whenever you relocate before the annual electoral register is certified.
+                    </p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-summary">
+                    <span class="faq-question" data-i18n="citizen_faq_q6">Is my personal information and biometric data secure?</span>
+                    <span class="faq-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <div class="faq-answer">
+                    <p data-i18n="citizen_faq_a6">
+                        Yes, absolutely. All sensitive identity records, personal information, and biometric face captures are encrypted in transit and at rest on state election servers in accordance with strict national data protection regulations.
+                    </p>
+                </div>
+            </details>
+        </div>
+
+        <!-- Bottom Actions -->
+        <div class="modal-actions citizen-bottom-actions">
+            <a href="{% url 'home' %}" class="btn btn-hero-secondary">← Back to Home</a>
+            <a href="{% url 'voter_signup' %}" class="btn btn-hero-primary" data-i18n="citizen_btn_signup"> Sign Up Now</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

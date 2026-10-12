@@ -134,3 +134,6 @@ VERIFICATION_CODE_EXPIRY = 300  # 5 minutes in seconds
 # Default primary key field type
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# External Polling Station System URL
+POLLING_SYSTEM_URL = os.environ.get("POLLING_SYSTEM_URL", "http://127.0.0.1:8001/")

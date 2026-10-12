@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="home-hero-section citizens-hero-wrapper">
+    <div class="hero-bg-layer" aria-hidden="true"></div>
+    <div class="hero-overlay-layer" aria-hidden="true"></div>
+
+    <div class="voting-modal-card citizens-content-card">
+        <!-- 1. Hero Section -->
+        <div class="modal-badge">
+            <span class="badge-dot"></span>
+            <span data-i18n="officer_hero_badge">Official Portal</span>
+        </div>
+
+        <h1 class="modal-title citizens-title" data-i18n="officer_hero_title">Officer Portal</h1>
+        <p class="modal-subtitle citizens-subtitle" data-i18n="officer_hero_subtitle">
+            Official gateway for Election Registration Officers across all administrative districts.
+        </p>
+
+        <!-- 2. Officer Division Card -->
+        <div class="officer-cards-grid">
+            <!-- Card 1: Registration Officers -->
+            <div class="officer-role-card">
+                <div class="role-card-header">
+                    <div>
+                        <span class="badge-status">Registration Division</span>
+                        <h3 class="role-title" data-i18n="officer_card1_title">Election Registration Officers</h3>
+                    </div>
+                </div>
+                <p class="role-desc" data-i18n="officer_card1_desc">
+                    Review new voter signups, verify residential details, inspect live face captures, and approve, edit, or remove voter records in the system.
+                </p>
+                <div class="role-card-actions">
+                    <a href="{% url 'admin_login' %}" class="btn btn-hero-primary" data-i18n="officer_card1_btn">
+                        Registration Admin Login
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Voter Approval Guide for Registration Officers -->
+        <div class="section-divider"></div>
+        <div class="citizens-section-header">
+            <h2 class="section-heading" data-i18n="officer_guide_title">Voter Approval Guide for Registration Officers</h2>
+            <p class="section-subheading" data-i18n="officer_guide_subtitle">Standard operating procedure for reviewing and verifying new voter submissions:</p>
+        </div>
+
+        <div class="steps-grid">
+            <div class="step-card officer-step-card">
+                <div class="step-badge officer-step-badge" data-i18n="officer_step1_num">Step 1</div>
+                <h3 class="step-title" data-i18n="officer_step1_title">Access Admin Portal</h3>
+                <p class="step-description" data-i18n="officer_step1_desc">
+                    Sign in to the administrative console using your official staff username and password.
+                </p>
+            </div>
+
+            <div class="step-card officer-step-card">
+                <div class="step-badge officer-step-badge" data-i18n="officer_step2_num">Step 2</div>
+                <h3 class="step-title" data-i18n="officer_step2_title">Review Pending Signups</h3>
+                <p class="step-description" data-i18n="officer_step2_desc">
+                    Navigate to 'Manage Signups' to inspect newly submitted citizen registrations and SLIN/NIC entries.
+                </p>
+            </div>
+
+            <div class="step-card officer-step-card">
+                <div class="step-badge officer-step-badge" data-i18n="officer_step3_num">Step 3</div>
+                <h3 class="step-title" data-i18n="officer_step3_title">Verify Identity & Facial Photo</h3>
+                <p class="step-description" data-i18n="officer_step3_desc">
+                    Cross-check the Grama Niladari division and inspect the live webcam face capture for clarity and lighting.
+                </p>
+            </div>
+
+            <div class="step-card officer-step-card">
+                <div class="step-badge officer-step-badge" data-i18n="officer_step4_num">Step 4</div>
+                <h3 class="step-title" data-i18n="officer_step4_title">Approve & Issue Voter ID</h3>
+                <p class="step-description" data-i18n="officer_step4_desc">
+                    Generate the district-coded Voter ID and mark the registration as 'Verified' in the official registry.
+                </p>
+            </div>
+        </div>
+
+        <!-- Bottom Actions -->
+        <div class="modal-actions citizen-bottom-actions">
+            <a href="{% url 'home' %}" class="btn btn-hero-secondary">← Back to Home</a>
+            <a href="{% url 'admin_login' %}" class="btn btn-hero-primary" data-i18n="officer_card1_btn">Registration Admin Login</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="home-hero-section citizens-hero-wrapper">
+    <div class="hero-bg-layer" aria-hidden="true"></div>
+    <div class="hero-overlay-layer" aria-hidden="true"></div>
+
+    <div class="voting-modal-card citizens-content-card party-page-container">
+        <!-- 1. Hero Header -->
+        <div class="modal-badge">
+            <span class="badge-dot"></span>
+            <span data-i18n="party_hero_badge">Electoral Oversight & Party Portal</span>
+        </div>
+
+        <h1 class="modal-title citizens-title" data-i18n="party_hero_title">Political Parties and Candidates</h1>
+        <p class="modal-subtitle citizens-subtitle" data-i18n="party_hero_subtitle">
+            Official regulatory guidelines, electoral timeline, public voter demographics, and observer accreditation for political parties and candidates.
+        </p>
+
+        <!-- 2. Election Calendar (Timeline) -->
+        <div class="info-section-divider">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                <h2 class="section-heading" style="margin-bottom: 0;" data-i18n="party_timeline_title">Election Calendar</h2>
+                <span class="prototype-badge" data-i18n="party_timeline_badge">Prototype Sample Schedule</span>
+            </div>
+            <p class="section-subheading" data-i18n="party_timeline_subtitle">
+                Key operational milestones for candidate nominations, voter registry revisions, and polling operations across Sri Lanka.
+            </p>
+        </div>
+
+        <div class="timeline-container">
+            <!-- Timeline Item 1 -->
+            <div class="timeline-item">
+                <div class="timeline-node">
+                    <span class="timeline-dot dot-completed"></span>
+                    <span class="timeline-line"></span>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <span class="timeline-date" data-i18n="party_cal_step1_date">October 01, 2026</span>
+                        <span class="timeline-status status-completed" data-i18n="party_cal_step1_badge">Completed</span>
+                    </div>
+                    <h3 class="timeline-title" data-i18n="party_cal_step1_title">Voter Registration Open</h3>
+                    <p class="timeline-desc" data-i18n="party_cal_step1_desc">
+                        Commencement of annual voter register revision. Eligible citizens reaching 18 years can register online with SLIN/NIC and capture live facial biometric data.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Timeline Item 2 -->
+            <div class="timeline-item">
+                <div class="timeline-node">
+                    <span class="timeline-dot dot-active"></span>
+                    <span class="timeline-line"></span>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <span class="timeline-date" data-i18n="party_cal_step2_date">November 15, 2026</span>
+                        <span class="timeline-status status-urgent" data-i18n="party_cal_step2_badge">Upcoming Deadline</span>
+                    </div>
+                    <h3 class="timeline-title" data-i18n="party_cal_step2_title">Voter Registration Close</h3>
+                    <p class="timeline-desc" data-i18n="party_cal_step2_desc">
+                        Deadline for citizen self-registration submissions and requests for residential address or polling division updates.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Timeline Item 3 -->
+            <div class="timeline-item">
+                <div class="timeline-node">
+                    <span class="timeline-dot"></span>
+                    <span class="timeline-line"></span>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <span class="timeline-date" data-i18n="party_cal_step3_date">November 16 – 30, 2026</span>
+                        <span class="timeline-status status-pending" data-i18n="party_cal_step3_badge">Review Period</span>
+                    </div>
+                    <h3 class="timeline-title" data-i18n="party_cal_step3_title">Verification & Claims Period</h3>
+                    <p class="timeline-desc" data-i18n="party_cal_step3_desc">
+                        District officers verify GN divisions; draft registers are exhibited for recognized party agents and citizens to file formal claims or objections.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Timeline Item 4 -->
+            <div class="timeline-item">
+                <div class="timeline-node">
+                    <span class="timeline-dot"></span>
+                    <span class="timeline-line"></span>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <span class="timeline-date" data-i18n="party_cal_step4_date">December 10, 2026</span>
+                        <span class="timeline-status status-pending" data-i18n="party_cal_step4_badge">Scheduled</span>
+                    </div>
+                    <h3 class="timeline-title" data-i18n="party_cal_step4_title">Official Register Certification</h3>
+                    <p class="timeline-desc" data-i18n="party_cal_step4_desc">
+                        Certification and cryptographic lock of the finalized electoral roll across all 22 administrative electoral districts.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Timeline Item 5 -->
+            <div class="timeline-item timeline-item-final">
+                <div class="timeline-node">
+                    <span class="timeline-dot dot-final"></span>
+                </div>
+                <div class="timeline-content highlight-box">
+                    <div class="timeline-header">
+                        <span class="timeline-date" data-i18n="party_cal_step5_date">January 15, 2027</span>
+                        <span class="timeline-status status-primary" data-i18n="party_cal_step5_badge">Election Day</span>
+                    </div>
+                    <h3 class="timeline-title" data-i18n="party_cal_step5_title">Polling Day (07:00 AM – 04:00 PM)</h3>
+                    <p class="timeline-desc" data-i18n="party_cal_step5_desc">
+                        Nationwide voting at assigned polling booths with physical NIC check and live 1:1 facial biometric verification.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Rules and Guidelines Accordion -->
+        <div class="info-section-divider">
+            <h2 class="section-heading" data-i18n="party_rules_title">Rules and Guidelines</h2>
+            <p class="section-subheading" data-i18n="party_rules_subtitle">
+                Statutory protocols governing candidate campaigning, observer conduct, and election day integrity.
+            </p>
+        </div>
+
+        <div class="faq-accordion-wrapper">
+            <!-- Rule 1: Voter Registration Rules -->
+            <details class="faq-item rules-item" open>
+                <summary class="faq-summary">
+                    <span data-i18n="party_rule1_q">1. Voter Registration Rules for Political Parties</span>
+                    <span class="faq-chevron" aria-hidden="true">▼</span>
+                </summary>
+                <div class="faq-answer">
+                    <p data-i18n="party_rule1_a">
+                        Citizens must be at least 18 years old on qualifying date and ordinarily resident in the respective polling division. Dual or multiple registrations across constituencies are strictly prohibited under electoral law. Accredited political party agents have the statutory right to inspect draft electoral registers during the official claims period and submit formal objections.
+                    </p>
+                </div>
+            </details>
+
+            <!-- Rule 2: Campaign Conduct -->
+            <details class="faq-item rules-item">
+                <summary class="faq-summary">
+                    <span data-i18n="party_rule2_q">2. Campaign Conduct & Expenditure Regulations</span>
+                    <span class="faq-chevron" aria-hidden="true">▼</span>
+                </summary>
+                <div class="faq-answer">
+                    <p data-i18n="party_rule2_a">
+                        All candidates and political parties must strictly adhere to spending ceilings specified under the Regulation of Election Expenditure Act (No. 3 of 2023). A strict 48-hour campaign silence period (blackout) applies prior to polling day. Campaigning using state resources, public vehicles, hate speech, or religious incitement is strictly punishable by law.
+                    </p>
+                </div>
+            </details>
+
+            <!-- Rule 3: Polling-Station Agent Rules -->
+            <details class="faq-item rules-item">
+                <summary class="faq-summary">
+                    <span data-i18n="party_rule3_q">3. Polling-Station Agent Rules</span>
+                    <span class="faq-chevron" aria-hidden="true">▼</span>
+                </summary>
+                <div class="faq-answer">
+                    <p data-i18n="party_rule3_a">
+                        Each recognized political party and independent group is entitled to appoint up to 2 polling agents per polling booth. Agents must be registered electors within the administrative district. Polling agents may observe voter check-in, ballot issuance, and the sealing of ballot boxes, but must remain in designated observation areas without interfering with voters or possessing mobile phones inside the booth.
+                    </p>
+                </div>
+            </details>
+
+            <!-- Rule 4: Face-Verification Process Explained for Observers -->
+            <details class="faq-item rules-item">
+                <summary class="faq-summary">
+                    <span data-i18n="party_rule4_q">4. Face-Verification Process Explained for Observers</span>
+                    <span class="faq-chevron" aria-hidden="true">▼</span>
+                </summary>
+                <div class="faq-answer">
+                    <p data-i18n="party_rule4_a">
+                        On polling day, the voter presents their NIC/SLIN. The polling booth camera captures a live video frame and extracts a 1:1 mathematical feature embedding. This embedding is matched against the encrypted template registered for that NIC. The entire match is performed locally within milliseconds without transmitting raw images over the network. If a biometric mismatch occurs, the Presiding Officer follows standard challenged voter verification protocols.
+                    </p>
+                </div>
+            </details>
+        </div>
+
+        <!-- 4. Request Observer Access Contact Box -->
+        <div class="info-section-divider">
+            <h2 class="section-heading" data-i18n="party_obs_title">Request Observer Access</h2>
+            <p class="section-subheading" data-i18n="party_obs_subtitle">
+                Accreditation portal for recognized election monitoring missions, party observation teams, and international delegates.
+            </p>
+        </div>
+
+        <div class="data-request-box observer-request-box">
+            <div class="data-request-policy">
+                <p data-i18n="party_obs_policy">
+                    Accreditation is granted strictly to registered political parties, independent candidate representatives, and authorized domestic/international monitoring bodies (PAFFREL, CMEV, ANFREL, EU EOM). Observers must abide by the official Code of Conduct for Election Observers.
+                </p>
+            </div>
+
+            <div class="data-contact-grid">
+                <div class="contact-entry">
+                    <span class="contact-entry-label" data-i18n="party_obs_unit_label">Accreditation Unit:</span>
+                    <span class="contact-entry-val" data-i18n="party_obs_unit_val">International & Domestic Observer Secretariat, Election Commission of Sri Lanka</span>
+                </div>
+
+                <div class="contact-entry">
+                    <span class="contact-entry-label" data-i18n="party_obs_email_label">Secretariat Email:</span>
+                    <a href="mailto:observers@elections.gov.lk?subject=Election%20Observer%20Accreditation%20Request" class="contact-link">observers@elections.gov.lk</a>
+                </div>
+
+                <div class="contact-entry">
+                    <span class="contact-entry-label" data-i18n="party_obs_hotline_label">Hotline:</span>
+                    <span class="contact-entry-val">+94 11 286 8443 / +94 11 286 8444</span>
+                </div>
+
+                <div class="contact-entry">
+                    <span class="contact-entry-label" data-i18n="agency_contact_address_label">Headquarters:</span>
+                    <span class="contact-entry-val" data-i18n="agency_contact_address_val">Sarana Mawatha, Rajagiriya, Colombo, Sri Lanka</span>
+                </div>
+            </div>
+
+            <div class="data-actions-row">
+                <a href="mailto:observers@elections.gov.lk?subject=Election%20Observer%20Accreditation%20Request" class="btn btn-hero-primary" data-i18n="party_obs_btn">
+                     Submit Observer Application
+                </a>
+                <a href="{% url 'home' %}" class="btn btn-hero-secondary" data-i18n="party_obs_home">
+                    ← Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

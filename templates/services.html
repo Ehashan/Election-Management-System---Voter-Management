@@ -1,0 +1,258 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="home-hero-section citizens-hero-wrapper">
+    <div class="hero-bg-layer" aria-hidden="true"></div>
+    <div class="hero-overlay-layer" aria-hidden="true"></div>
+
+    <div class="voting-modal-card citizens-content-card services-page-container">
+        <!-- 1. Hero Header -->
+        <div class="modal-badge">
+            <span class="badge-dot"></span>
+            <span data-i18n="services_hero_badge">Public Services Portal</span>
+        </div>
+
+        <h1 class="modal-title citizens-title" data-i18n="services_hero_title">Other Services & Citizen Support</h1>
+        <p class="modal-subtitle citizens-subtitle" data-i18n="services_hero_subtitle">
+            Voter verification tools, frequently asked questions, institutional contacts, and biometric privacy policy.
+        </p>
+
+        <!-- 2. Services Cards Grid -->
+        <div class="services-cards-grid">
+            <!-- Card 1: Check Registration Status -->
+            <div class="service-feature-card service-card-highlight">
+                <div class="service-card-header">
+                    <span class="service-icon"></span>
+                    <div>
+                        <span class="badge-status">Self-Service Tool</span>
+                        <h3 class="service-card-title" data-i18n="services_card_status_title">Check Registration Status</h3>
+                    </div>
+                </div>
+                <p class="service-card-desc" data-i18n="services_card_status_desc">
+                    Instantly check if your voter registration is Not found, Pending approval, or Approved. Only your verification status and registration date are displayed to protect privacy.
+                </p>
+
+                <!-- Embedded Quick Search Form -->
+                <form method="POST" action="{% url 'check_status' %}" class="service-quick-form">
+                    {% csrf_token %}
+                    <div class="service-input-group">
+                        <input 
+                            type="text" 
+                            name="nic" 
+                            class="service-input-field" 
+                            placeholder="Enter SLIN / NIC (e.g., 852468135V)" 
+                            required 
+                            maxlength="20"
+                        >
+                        <button type="submit" class="btn btn-hero-primary service-submit-btn" data-i18n="services_btn_quick_check">
+                            Check Status
+                        </button>
+                    </div>
+                </form>
+
+                <div class="service-card-footer">
+                    <span class="anti-guessing-note" data-i18n="services_rate_note">
+                         Anti-guessing protected: 5 attempts per minute per IP.
+                    </span>
+                    <a href="{% url 'check_status' %}" class="service-card-link" data-i18n="services_link_dedicated">
+                        Open Dedicated Check Page →
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 2: Contact Us (Simple Contact Info Section - No Email Sending) -->
+            <div class="service-feature-card">
+                <div class="service-card-header">
+                    <span class="service-icon">📞</span>
+                    <div>
+                        <span class="badge-status">Direct Inquiries</span>
+                        <h3 class="service-card-title" data-i18n="services_card_contact_title">Contact Us</h3>
+                    </div>
+                </div>
+                <p class="service-card-desc" data-i18n="services_card_contact_desc">
+                    Direct institutional contact information for the Election Commission of Sri Lanka. Reach out to our public inquiry desks via toll-free helpline, phone, or physical office.
+                </p>
+
+                <div class="service-contact-info-list">
+                    <div class="contact-info-item">
+                        <span class="ci-icon"></span>
+                        <div>
+                            <span class="ci-label" data-i18n="services_ci_helpline_label">Toll-Free Election Helpline:</span>
+                            <span class="ci-val">1929 (Toll-Free Islandwide)</span>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <span class="ci-icon"></span>
+                        <div>
+                            <span class="ci-label" data-i18n="services_ci_phone_label">General Inquiries:</span>
+                            <span class="ci-val">+94 11 286 8441 / +94 11 286 8442</span>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <span class="ci-icon"></span>
+                        <div>
+                            <span class="ci-label" data-i18n="services_ci_email_label">Official Inquiries Email:</span>
+                            <span class="ci-val">inquiries@elections.gov.lk</span>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <span class="ci-icon"></span>
+                        <div>
+                            <span class="ci-label" data-i18n="services_ci_hours_label">Office Working Hours:</span>
+                            <span class="ci-val" data-i18n="services_ci_hours_val">Monday – Friday, 08:30 AM – 04:15 PM</span>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <span class="ci-icon"></span>
+                        <div>
+                            <span class="ci-label" data-i18n="agency_contact_address_label">Headquarters:</span>
+                            <span class="ci-val" data-i18n="agency_contact_address_val">Sarana Mawatha, Rajagiriya, Colombo, Sri Lanka</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card-footer">
+                    <span class="anti-guessing-note" style="color: #6b5777;">
+                         Direct contact info only. No automated message dispatching.
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Section: Frequently Asked Questions (FAQ) -->
+        <div class="info-section-divider">
+            <h2 class="section-heading" data-i18n="services_faq_title">Frequently Asked Questions (FAQ)</h2>
+            <p class="section-subheading" data-i18n="services_faq_subtitle">
+                Common questions about registration checking, approval timelines, and data privacy.
+            </p>
+        </div>
+
+        <div class="faq-accordion-wrapper">
+            <details class="faq-item" open>
+                <summary class="faq-summary">
+                    <span data-i18n="services_faq_q1">How do I know if my voter registration was approved?</span>
+                    <span class="faq-chevron" aria-hidden="true">▼</span>
+                </summary>
+                <div class="faq-answer">
+                    <p data-i18n="services_faq_a1">
+                        Use the "Check Registration Status" tool above by entering your National Identity Card (NIC) number. If approved, your status will display "Approved", and you are fully eligible to vote at your assigned polling booth.
+                    </p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-summary">
+                    <span data-i18n="services_faq_q2">What does "Pending approval" mean?</span>
+                    <span class="faq-chevron" aria-hidden="true">▼</span>
+                </summary>
+                <div class="faq-answer">
+                    <p data-i18n="services_faq_a2">
+                        "Pending approval" means your registration submission has been safely received and is undergoing review by Election Registration Officers to verify residential boundaries and photo quality. Approval typically takes 1 to 3 business days.
+                    </p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-summary">
+                    <span data-i18n="services_faq_q3">Can anyone else see my personal information using the status check?</span>
+                    <span class="faq-chevron" aria-hidden="true">▼</span>
+                </summary>
+                <div class="faq-answer">
+                    <p data-i18n="services_faq_a3">
+                        No. The status check is privacy-hardened. It returns ONLY the verification status ("Approved", "Pending approval", or "Not found") and the registration date. It never reveals names, addresses, photographs, or contact numbers. It is also limited to 5 checks per minute to prevent automated guessing.
+                    </p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-summary">
+                    <span data-i18n="services_faq_q4">What should I do if my status displays "Not found"?</span>
+                    <span class="faq-chevron" aria-hidden="true">▼</span>
+                </summary>
+                <div class="faq-answer">
+                    <p data-i18n="services_faq_a4">
+                        If your status is "Not found", you may not have completed your voter registration. Please navigate to the "For Citizens" tab to create your account and complete detailed registration with your webcam facial photo.
+                    </p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-summary">
+                    <span data-i18n="services_faq_q5">How can I update my address or polling division?</span>
+                    <span class="faq-chevron" aria-hidden="true">▼</span>
+                </summary>
+                <div class="faq-answer">
+                    <p data-i18n="services_faq_a5">
+                        You can sign in to your voter account at any time before the annual electoral register certification deadline and update your residential address, administrative district, and Grama Niladari division.
+                    </p>
+                </div>
+            </details>
+        </div>
+
+        <!-- 4. Section: Privacy Policy -->
+        <div class="info-section-divider">
+            <h2 class="section-heading" data-i18n="services_privacy_title">Privacy Policy & Biometric Data Notice</h2>
+            <p class="section-subheading" data-i18n="services_privacy_subtitle">
+                Clear and transparent explanation of what voter data is collected, including face images, and why.
+            </p>
+        </div>
+
+        <div class="privacy-policy-box">
+            <div class="privacy-section-block">
+                <h3 class="privacy-block-title" data-i18n="services_pp_data_title">1. What Data We Collect</h3>
+                <p class="privacy-block-text" data-i18n="services_pp_data_desc">
+                    When you register as an elector in the Election Management System, we collect the following essential categories of information:
+                </p>
+                <ul class="privacy-data-list">
+                    <li><strong data-i18n="services_pp_item1_label">Identity & Demographic Information:</strong> <span data-i18n="services_pp_item1_desc">National Identity Card (SLIN / NIC) number, full name, date of birth, gender, and mobile telephone number.</span></li>
+                    <li><strong data-i18n="services_pp_item2_label">Residential & Electoral Mapping:</strong> <span data-i18n="services_pp_item2_desc">Administrative District, Electoral District, Polling Division, Postal Code, Grama Niladari (GN) Division, street address, and household number.</span></li>
+                    <li><strong data-i18n="services_pp_item3_label">Biometric Facial Imagery:</strong> <span data-i18n="services_pp_item3_desc">High-resolution live webcam photograph of your face captured directly during the final step of voter registration.</span></li>
+                </ul>
+            </div>
+
+            <div class="privacy-section-block">
+                <h3 class="privacy-block-title" data-i18n="services_pp_why_title">2. Why We Collect This Data & How It Is Used</h3>
+                <div class="privacy-reasons-grid">
+                    <div class="privacy-reason-card">
+                        <span class="pr-icon"></span>
+                        <h4 data-i18n="services_pp_r1_title">Legal Eligibility Mandate</h4>
+                        <p data-i18n="services_pp_r1_desc">To verify that the elector meets constitutional voting age criteria (18 years or older on qualifying date) and is ordinarily resident in the designated electoral division.</p>
+                    </div>
+
+                    <div class="privacy-reason-card">
+                        <span class="pr-icon"></span>
+                        <h4 data-i18n="services_pp_r2_title">Impersonation & Fraud Prevention</h4>
+                        <p data-i18n="services_pp_r2_desc">Facial biometric images are captured to uniquely authenticate electors at polling booths on election day. Live camera comparison completely eliminates double-voting and voter impersonation fraud.</p>
+                    </div>
+
+                    <div class="privacy-reason-card">
+                        <span class="pr-icon"></span>
+                        <h4 data-i18n="services_pp_r3_title">Encrypted Biometric Storage</h4>
+                        <p data-i18n="services_pp_r3_desc">Face photos and derived mathematical feature embeddings are encrypted at rest using AES-256 cryptographic standards. Raw unencrypted biometric streams are never transmitted over public networks.</p>
+                    </div>
+
+                    <div class="privacy-reason-card">
+                        <span class="pr-icon"></span>
+                        <h4 data-i18n="services_pp_r4_title">PDPA No. 9 of 2022 Compliance</h4>
+                        <p data-i18n="services_pp_r4_desc">All records are processed strictly under statutory public-interest provisions of the Sri Lankan Personal Data Protection Act. Citizen data is never sold, shared with third parties, or used for commercial purposes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back to Home Action -->
+        <div class="data-actions-row" style="margin-top: 34px; justify-content: center;">
+            <a href="{% url 'home' %}" class="btn btn-hero-secondary" data-i18n="status_btn_home">
+                 Back to Home
+            </a>
+            <a href="{% url 'citizens' %}" class="btn btn-hero-primary" data-i18n="nav_citizens">
+                For Citizens
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

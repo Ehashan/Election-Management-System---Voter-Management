@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="home-hero-section citizens-hero-wrapper">
+    <div class="hero-bg-layer" aria-hidden="true"></div>
+    <div class="hero-overlay-layer" aria-hidden="true"></div>
+
+    <div class="voting-modal-card citizens-content-card check-status-card-container">
+        <!-- Badge -->
+        <div class="modal-badge">
+            <span class="badge-dot"></span>
+            <span data-i18n="status_badge">Real-Time Verification</span>
+        </div>
+
+        <h1 class="modal-title citizens-title" data-i18n="status_title">Check Registration Status</h1>
+        <p class="modal-subtitle citizens-subtitle" data-i18n="status_subtitle">
+            Enter your National Identity Card (NIC) number to check your current electoral registration status.
+        </p>
+
+        <!-- Privacy & Anti-Guessing Guarantee -->
+        <div class="agency-privacy-banner" style="margin-bottom: 24px;">
+            <span class="privacy-icon"></span>
+            <span data-i18n="status_privacy_notice">
+                Privacy Protected: Displays ONLY your verification status and registration date. No names, photographs, or addresses are ever disclosed. Rate-limited to 5 attempts per minute.
+            </span>
+        </div>
+
+        <!-- Search Form -->
+        <form method="POST" action="{% url 'check_status' %}" class="status-search-form" id="checkStatusForm">
+            {% csrf_token %}
+            <div class="status-search-group">
+                <input 
+                    type="text" 
+                    name="nic" 
+                    id="nicInput"
+                    class="status-search-input" 
+                    placeholder="Enter SLIN / NIC (e.g., 852468135V or 199012304567)" 
+                    value="{{ searched_nic|default:'' }}"
+                    required 
+                    autocomplete="off"
+                    maxlength="20"
+                >
+                <button type="submit" class="btn btn-hero-primary status-search-btn" data-i18n="status_btn_check">
+                    🔍 Verify Status
+                </button>
+            </div>
+        </form>
+
+        <!-- Rate Limit / Error Banner -->
+        {% if rate_limited %}
+        <div class="status-alert-box alert-rate-limited">
+            <span class="alert-icon"></span>
+            <div>
+                <strong>Rate Limit Reached</strong>
+                <p>{{ error_message }}</p>
+            </div>
+        </div>
+        {% elif error_message %}
+        <div class="status-alert-box alert-error">
+            <span class="alert-icon"></span>
+            <p>{{ error_message }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Status Result Card -->
+        {% if status_result %}
+        <div class="status-result-display">
+            {% if status_result == 'Approved' %}
+            <div class="status-result-card result-approved">
+                <div class="result-header">
+                    <span class="result-icon"></span>
+                    <span class="result-pill pill-approved" data-i18n="status_val_approved">Approved</span>
+                </div>
+                <h3 class="result-title" data-i18n="status_approved_title">Voter Registration Verified</h3>
+                <p class="result-desc" data-i18n="status_approved_desc">
+                    Your voter registration has been verified and approved by the Election Registration Officer. You are eligible to cast your vote at your assigned polling booth.
+                </p>
+                <div class="result-meta">
+                    <span class="meta-label" data-i18n="status_date_label">Registration Date:</span>
+                    <span class="meta-value">{{ registration_date }}</span>
+                </div>
+            </div>
+
+            {% elif status_result == 'Pending approval' %}
+            <div class="status-result-card result-pending">
+                <div class="result-header">
+                    <span class="result-icon"></span>
+                    <span class="result-pill pill-pending" data-i18n="status_val_pending">Pending approval</span>
+                </div>
+                <h3 class="result-title" data-i18n="status_pending_title">Application Under Review</h3>
+                <p class="result-desc" data-i18n="status_pending_desc">
+                    Your voter registration record has been received and is currently undergoing address and Grama Niladari division verification by electoral officials.
+                </p>
+                <div class="result-meta">
+                    <span class="meta-label" data-i18n="status_date_label">Registration Date:</span>
+                    <span class="meta-value">{{ registration_date }}</span>
+                </div>
+            </div>
+
+            {% elif status_result == 'Not found' %}
+            <div class="status-result-card result-notfound">
+                <div class="result-header">
+                    <span class="result-icon"></span>
+                    <span class="result-pill pill-notfound" data-i18n="status_val_notfound">Not found</span>
+                </div>
+                <h3 class="result-title" data-i18n="status_notfound_title">No Registration Record Found</h3>
+                <p class="result-desc" data-i18n="status_notfound_desc">
+                    No voter registration profile matching this National Identity Card number was found in the electoral database. If you have not registered yet, you can complete your registration online.
+                </p>
+                <div class="result-actions" style="margin-top: 16px;">
+                    <a href="{% url 'voter_registration' %}" class="btn btn-hero-primary" data-i18n="status_btn_register">
+                         Register as Voter
+                    </a>
+                    <a href="{% url 'voter_signup' %}" class="btn btn-hero-secondary" data-i18n="status_btn_signup">
+                         Create Account
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Navigation Buttons -->
+        <div class="data-actions-row" style="margin-top: 32px; justify-content: center;">
+            <a href="{% url 'services' %}" class="btn btn-hero-secondary" data-i18n="status_btn_back_services">
+                ← Back to Services
+            </a>
+            <a href="{% url 'home' %}" class="btn btn-hero-secondary" data-i18n="status_btn_home">
+                 Home
+            </a>
+        </div>
+    </div>
+</div> 
+{% endblock %}
