@@ -1,46 +1,31 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.http import JsonResponse
 from .forms import VoterSignupForm, VoterRegistrationForm
-from .db_utils import get_db, generate_voter_id, check_voter_registered
+from .db_utils import get_db, generate_voter_id, check_voter_registered, validate_temp_nic, mark_temp_nic_status
 from pymongo.errors import OperationFailure
 import random
 from datetime import datetime, timedelta
 
-import qrcode
-from io import BytesIO
-import base64
-
-def generate_qr_code(data):
-
-    try:
-        qr = qrcode.QRCode(
-            version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
-            border=2,
-        )
-        qr.add_data(data)
-        qr.make(fit=True)
-        
-        img = qr.make_image(fill_color="black", back_color="white")
-        
-        # Convert to base64
-        buffer = BytesIO()
-        img.save(buffer, format='PNG')
-        buffer.seek(0)
-        img_str = base64.b64encode(buffer.getvalue()).decode()
-        
-        return img_str
-    except Exception as e:
-        print(f"Error generating QR code: {e}")
-        return None
 
 def home(request):
     return render(request, 'home.html')
+
+def user_logout(request):
+    logout(request)
+    return redirect('home')
+
+def check_nic(request):
+    """API endpoint to validate NIC in real time against temp_nic collection."""
+    nic = request.GET.get('nic', '').strip()
+    if not nic:
+        return JsonResponse({'valid': False, 'status': 'empty', 'message': 'NIC is required.'})
+    is_valid, status, message = validate_temp_nic(nic)
+    return JsonResponse({'valid': is_valid, 'status': status, 'message': message})
 
 def voter_signup(request):
     if request.method == 'POST':
@@ -68,14 +53,18 @@ def voter_signup(request):
                     'mobile_number': mobile,
                     'is_mobile_verified': False
                 })
+                # Mark NIC as used in temp_nic collection
+                mark_temp_nic_status(nic, is_used=True, user_id=user.id)
                 print(f"DEBUG: Inserted to Registration collection with ID: {result.inserted_id}")
             except OperationFailure as e:
                 user.delete()
+                mark_temp_nic_status(nic, is_used=False)
                 error_msg = f"Database Error: {e.details.get('errmsg', str(e))}. Admin: Check MONGO_URI in settings.py."
                 form.add_error(None, error_msg)
                 return render(request, 'voter_signup.html', {'form': form})
             except Exception as e:
                 user.delete()
+                mark_temp_nic_status(nic, is_used=False)
                 form.add_error(None, f"Unexpected error: {str(e)}")
                 return render(request, 'voter_signup.html', {'form': form})
             
@@ -282,13 +271,9 @@ def voter_registration(request):
             print(f"DEBUG: Saved detailed registration to voters collection for user {request.user.id}")
             print(f"DEBUG: Voter ID: {data['voter_id']}")
             
-            # Generate QR code for voter ID
-            qr_code_base64 = generate_qr_code(data['voter_id'])
-            
             return render(request, 'registration_success.html', {
                 'user': request.user,
-                'voter_id': data['voter_id'],
-                'qr_code': qr_code_base64
+                'voter_id': data['voter_id']
             })
     else:
         # Pre-fill form with existing data

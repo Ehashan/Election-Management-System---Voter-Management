@@ -242,7 +242,7 @@
                 {{ request.user.username|make_list|first|upper }}
             </div>
             <span>{{ request.user.username }}</span>
-            <a href="{% url 'home' %}" style="margin-left: auto; color: var(--text-muted);"><i
+            <a href="{% url 'logout' %}" title="Log Out" style="margin-left: auto; color: var(--text-muted);"><i
                     class="fas fa-sign-out-alt"></i></a>
         </div>
     </aside>

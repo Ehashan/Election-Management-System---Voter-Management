@@ -83,4 +83,108 @@ def initialize_db_indexes():
     db.voters.create_index('nic', unique=True)
     db.voters.create_index([('admin_district', 1), ('election_year', 1)])
     
+    # temp_nic collection indexes
+    db.temp_nic.create_index('nic', unique=True)
+    
     print("Database indexes created successfully")
+
+# 50 Pre-generated random valid Sri Lankan NIC numbers (25 Old format + 25 New format)
+SAMPLE_TEMP_NICS = [
+    # 25 Old format (9 digits + V)
+    "781423589V", "792154687V", "803215498V", "811564789V", "822453698V",
+    "833125478V", "841789654V", "852468135V", "863579246V", "871357924V",
+    "882468013V", "893579124V", "901452369V", "912563478V", "923674589V",
+    "931478523V", "942589631V", "953691472V", "961472583V", "972583691V",
+    "983694715V", "991592634V", "876543210V", "915432167V", "948765432V",
+    # 25 New format (12 digits)
+    "198512304561", "198623405672", "198734506783", "198845607894", "198956708905",
+    "199012304567", "199123405678", "199234506789", "199345607890", "199456708901",
+    "199512307892", "199623408903", "199734509014", "199845601235", "199956702346",
+    "200012303457", "200123404568", "200234505679", "200345606780", "200456707891",
+    "200512308902", "199467801234", "199678902345", "199889003456", "200190104567"
+]
+
+def seed_temp_nics(overwrite=False):
+    """
+    Populate temp_nic collection with 50 valid Sri Lankan NIC numbers.
+    """
+    db = get_db()
+    if overwrite:
+        db.temp_nic.delete_many({})
+    
+    inserted_count = 0
+    for nic in SAMPLE_TEMP_NICS:
+        existing = db.temp_nic.find_one({'nic': nic})
+        if not existing:
+            db.temp_nic.insert_one({
+                'nic': nic,
+                'is_used': False,
+                'created_at': datetime.now(),
+                'used_at': None,
+                'user_id': None
+            })
+            inserted_count += 1
+            
+    db.temp_nic.create_index('nic', unique=True)
+    return inserted_count, len(SAMPLE_TEMP_NICS)
+
+def validate_temp_nic(nic):
+    """
+    Validates a NIC against the temp_nic collection.
+    Returns: (is_valid: bool, status: str, message: str)
+    Statuses:
+      - 'invalid_format'
+      - 'invalid_nic'
+      - 'already_used'
+      - 'available'
+    """
+    import re
+    from django.contrib.auth.models import User
+    
+    if not nic:
+        return False, 'invalid_nic', 'NIC is required.'
+    
+    nic_clean = nic.strip().upper()
+    
+    old_format = re.match(r'^[0-9]{9}[VX]$', nic_clean)
+    new_format = re.match(r'^[0-9]{12}$', nic_clean)
+    if not (old_format or new_format):
+        return False, 'invalid_format', 'Invalid NIC format. Use 9 digits + V (e.g., 123456789V) or 12 digits (e.g., 199912345678)'
+    
+    db = get_db()
+    temp_record = db.temp_nic.find_one({'nic': {'$regex': f'^{re.escape(nic_clean)}$', '$options': 'i'}})
+    
+    if not temp_record:
+        return False, 'invalid_nic', 'Invalid NIC. This NIC does not exist in the official records.'
+    
+    # Check if already used
+    is_temp_used = temp_record.get('is_used', False)
+    has_django_user = User.objects.filter(username__iexact=nic_clean).exists()
+    has_registration = db.Registration.find_one({'nic': {'$regex': f'^{re.escape(nic_clean)}$', '$options': 'i'}}) is not None
+    
+    if is_temp_used or has_django_user or has_registration:
+        return False, 'already_used', 'NIC already used. This NIC has already been registered.'
+    
+    return True, 'available', 'Valid NIC'
+
+def mark_temp_nic_status(nic, is_used=True, user_id=None):
+    """Mark a NIC in temp_nic as used or unused."""
+    import re
+    if not nic:
+        return
+    nic_clean = nic.strip().upper()
+    db = get_db()
+    update_fields = {'is_used': is_used}
+    if is_used:
+        update_fields['used_at'] = datetime.now()
+        if user_id:
+            update_fields['user_id'] = user_id
+    else:
+        update_fields['used_at'] = None
+        update_fields['user_id'] = None
+        
+    db.temp_nic.update_one(
+        {'nic': {'$regex': f'^{re.escape(nic_clean)}$', '$options': 'i'}},
+        {'$set': update_fields}
+    )
+

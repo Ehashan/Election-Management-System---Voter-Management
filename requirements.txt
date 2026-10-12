@@ -2,6 +2,4 @@ Django>=5.2.8
 pymongo>=4.6.0
 Pillow>=10.0.0
 python-dotenv>=1.0.0
-dnspython>=2.4.0
-qrcode>=8.0
-python-dotenv
+dnspython>=2.4.0

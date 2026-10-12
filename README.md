@@ -79,7 +79,7 @@ Navigate to `http://localhost:8000` in your web browser.
 - `voters/`: Core app handling voter registration and models.
 - `templates/`: HTML templates (including `voter_registration.html` for face capture).
 - `static/`: Static assets (CSS, JS, images).
-- `media/`: Uploaded files and generated QR codes/images.
+- `media/`: Uploaded files and images.
 
 ## 🔒 Security
 - `.env` and `.venv` are ignored via `.gitignore` to prevent secret leaks.

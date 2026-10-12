@@ -15,9 +15,15 @@
             
         </div>
         <div class="auth-links">
-            <span>You are not signed in</span>
-            <a href="{% url 'voter_signin' %}">🔑 Sign In</a>
-            <a href="{% url 'voter_signup' %}">👤 Sign Up</a>
+            {% if user.is_authenticated %}
+                <span data-i18n="signed_in_as">Signed in as</span> <strong>{{ user.first_name|default:user.username }}</strong>
+                <a href="{% url 'voter_registration' %}" data-i18n="vreg_title">📋 Voter Registration</a>
+                <a href="{% url 'logout' %}" class="logout-btn" data-i18n="logout_btn">🚪 Sign Out</a>
+            {% else %}
+                <span data-i18n="not_signed_in">You are not signed in</span>
+                <a href="{% url 'voter_signin' %}" data-i18n="sign_in">🔑 Sign In</a>
+                <a href="{% url 'voter_signup' %}" data-i18n="sign_up">👤 Sign Up</a>
+            {% endif %}
         </div>
     </div>
 
@@ -30,23 +36,24 @@
                 <h1>Election Commission of Sri Lanka</h1>
             </div>
         </div>
-        <div>
-            <select style="padding: 5px 10px; border-radius: 4px; border: 1px solid #ddd;">
-                <option>🇬🇧 English</option>
-                <option>සිංහල</option>
-                <option>தமிழ்</option>
+        <div class="language-selector-wrapper">
+            <span class="lang-icon">🌐</span>
+            <select id="language-selector" class="language-dropdown" aria-label="Change Language">
+                <option value="en">🇬🇧 English</option>
+                <option value="si">🇱🇰 සිංහල</option>
+                <option value="ta">🇱🇰 தமிழ்</option>
             </select>
         </div>
     </header>
 
     <nav>
         <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="#">For Citizens</a></li>
-            <li><a href="#">For Government Officers</a></li>
-            <li><a href="#">For Government Agencies</a></li>
-            <li><a href="#">For Political Parties</a></li>
-            <li><a href="#">Other Services</a></li>
+            <li><a href="{% url 'home' %}" data-i18n="nav_home">Home</a></li>
+            <li><a href="#" data-i18n="nav_citizens">For Citizens</a></li>
+            <li><a href="#" data-i18n="nav_gov_officers">For Government Officers</a></li>
+            <li><a href="#" data-i18n="nav_gov_agencies">For Government Agencies</a></li>
+            <li><a href="#" data-i18n="nav_political_parties">For Political Parties</a></li>
+            <li><a href="#" data-i18n="nav_other_services">Other Services</a></li>
         </ul>
     </nav>
 
@@ -55,10 +62,11 @@
         {% endblock %}
     </div>
 
-    <footer>
+    <footer data-i18n="footer_rights">
         &copy; 2026 Election Commission of Sri Lanka. All Rights Reserved.
     </footer>
 
+    <script src="/static/js/translations.js"></script>
     <script src="/static/js/script.js"></script>
 </body>
 
