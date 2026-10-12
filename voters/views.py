@@ -7,9 +7,11 @@ from django.conf import settings
 from django.http import JsonResponse
 from .forms import VoterSignupForm, VoterRegistrationForm
 from .db_utils import get_db, generate_voter_id, check_voter_registered, validate_temp_nic, mark_temp_nic_status
+from .sms_utils import send_verification_sms
 from pymongo.errors import OperationFailure
 import random
 from datetime import datetime, timedelta
+
 
 
 def home(request):
@@ -80,6 +82,10 @@ def voter_signup(request):
             print(f"DEBUG: Verification Code for {mobile}: {verification_code}")
             print(f"DEBUG: Code expires at: {code_expiry}")
             
+            # Send SMS via Twilio
+            sms_sent, sms_detail = send_verification_sms(mobile, verification_code)
+            if not sms_sent:
+                print(f"WARNING: Twilio SMS failed to send: {sms_detail}")
             
             return redirect('mobile_verification')
     else:
@@ -111,11 +117,19 @@ def mobile_verification(request):
             
             print(f"DEBUG: New Verification Code: {new_code}")
             
+            # Send SMS via Twilio
+            sms_sent, sms_detail = send_verification_sms(mobile_number, new_code)
+            if sms_sent:
+                success_msg = 'A new verification code has been sent to your mobile phone via SMS!'
+            else:
+                success_msg = f'New code generated (SMS alert: {sms_detail})'
+            
             return render(request, 'mobile_verification.html', {
                 'debug_code': new_code,
                 'mobile_number': mobile_number,
-                'success': 'New verification code generated!'
+                'success': success_msg
             })
+
         
         # Handle code verification
         code = request.POST.get('code')

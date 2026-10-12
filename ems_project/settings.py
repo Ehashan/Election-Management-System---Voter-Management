@@ -132,9 +132,16 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 # Verification Code Settings
 VERIFICATION_CODE_EXPIRY = 300  # 5 minutes in seconds
 
+# Twilio SMS Configuration
+TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
+TWILIO_PHONE_NUMBER = os.environ.get("TWILIO_PHONE_NUMBER")
+
 # Default primary key field type
+
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # External Polling Station System URL
 POLLING_SYSTEM_URL = os.environ.get("POLLING_SYSTEM_URL", "http://127.0.0.1:8001/")
+
