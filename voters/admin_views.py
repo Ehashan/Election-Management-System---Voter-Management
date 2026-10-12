@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .decorators import admin_required
-from .db_utils import get_db, generate_voter_id, DISTRICT_CODES
+from .db_utils import get_db, generate_voter_id, DISTRICT_CODES, mark_temp_nic_status
 from datetime import datetime
 
 @admin_required
@@ -265,6 +265,9 @@ def admin_delete_signup(request, nic):
         try:
             # Delete from Registration collection
             db.Registration.delete_one({'nic': nic})
+            
+            # Reset NIC status in temp_nic collection
+            mark_temp_nic_status(nic, is_used=False)
             
             # Delete from Django User model
             from django.contrib.auth.models import User

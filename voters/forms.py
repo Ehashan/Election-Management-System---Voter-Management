@@ -51,23 +51,14 @@ class VoterSignupForm(forms.Form):
 
     def clean_nic(self):
         nic = self.cleaned_data.get('nic', '').strip()
+        from .db_utils import validate_temp_nic
         
-        # Validate NIC format
-        # Old format: 9 digits + V/X (e.g., 123456789V)
-        # New format: 12 digits (e.g., 199912345678)
-        old_format = re.match(r'^[0-9]{9}[vVxX]$', nic)
-        new_format = re.match(r'^[0-9]{12}$', nic)
+        is_valid, status, message = validate_temp_nic(nic)
+        if not is_valid:
+            raise forms.ValidationError(message)
         
-        if not (old_format or new_format):
-            raise forms.ValidationError(
-                "Invalid NIC format. Use 9 digits + V (e.g., 123456789V) or 12 digits (e.g., 199912345678)"
-            )
-        
-        # Check if NIC already exists
-        if User.objects.filter(username=nic).exists():
-            raise forms.ValidationError("User with this NIC already exists")
-        
-        return nic
+        return nic.upper()
+
     
     def clean_mobile_number(self):
         mobile = self.cleaned_data.get('mobile_number', '').strip()

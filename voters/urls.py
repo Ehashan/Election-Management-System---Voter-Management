@@ -4,6 +4,7 @@ from . import views, admin_views
 urlpatterns = [
     path('', views.home, name='home'),
     path('signup/', views.voter_signup, name='voter_signup'),
+    path('check-nic/', views.check_nic, name='check_nic'),
     path('verify/', views.mobile_verification, name='mobile_verification'),
     path('signin/', views.voter_signin, name='voter_signin'),
     path('logout/', views.user_logout, name='logout'),

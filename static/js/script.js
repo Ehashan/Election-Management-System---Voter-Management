@@ -106,11 +106,30 @@ function initFormValidation() {
     const nicInput = document.querySelector('input[name="nic"]');
     if (nicInput) {
         nicInput.addEventListener('blur', function() {
-            if (this.value && !validateNIC(this.value)) {
-                showFieldError(this, 'Invalid NIC format. Use 9 digits + V or 12 digits.');
-            } else {
+            const val = this.value.trim();
+            if (!val) {
                 clearFieldError(this);
+                return;
             }
+            if (!validateNIC(val)) {
+                showFieldError(this, 'Invalid NIC format. Use 9 digits + V or 12 digits.');
+                return;
+            }
+            
+            // Check with server temp_nic database
+            fetch('/check-nic/?nic=' + encodeURIComponent(val))
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.valid) {
+                        showFieldError(nicInput, data.message);
+                    } else {
+                        clearFieldError(nicInput);
+                        showFieldSuccess(nicInput, '✓ ' + data.message);
+                    }
+                })
+                .catch(err => {
+                    console.error('Error checking NIC:', err);
+                });
         });
     }
     
@@ -157,11 +176,31 @@ function showFieldError(input, message) {
     input.style.borderColor = '#ef4444';
 }
 
-// ===== Clear Field Error =====
+// ===== Show Field Success =====
+function showFieldSuccess(input, message) {
+    clearFieldError(input);
+    
+    const successDiv = document.createElement('div');
+    successDiv.className = 'field-success';
+    successDiv.style.color = '#10b981';
+    successDiv.style.fontSize = '12px';
+    successDiv.style.marginTop = '4px';
+    successDiv.style.fontWeight = '500';
+    successDiv.textContent = message;
+    
+    input.parentElement.appendChild(successDiv);
+    input.style.borderColor = '#10b981';
+}
+
+// ===== Clear Field Error & Success =====
 function clearFieldError(input) {
     const existingError = input.parentElement.querySelector('.field-error');
     if (existingError) {
         existingError.remove();
+    }
+    const existingSuccess = input.parentElement.querySelector('.field-success');
+    if (existingSuccess) {
+        existingSuccess.remove();
     }
     input.style.borderColor = '';
 }

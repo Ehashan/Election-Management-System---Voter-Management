@@ -4,8 +4,9 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.http import JsonResponse
 from .forms import VoterSignupForm, VoterRegistrationForm
-from .db_utils import get_db, generate_voter_id, check_voter_registered
+from .db_utils import get_db, generate_voter_id, check_voter_registered, validate_temp_nic, mark_temp_nic_status
 from pymongo.errors import OperationFailure
 import random
 from datetime import datetime, timedelta
@@ -17,6 +18,14 @@ def home(request):
 def user_logout(request):
     logout(request)
     return redirect('home')
+
+def check_nic(request):
+    """API endpoint to validate NIC in real time against temp_nic collection."""
+    nic = request.GET.get('nic', '').strip()
+    if not nic:
+        return JsonResponse({'valid': False, 'status': 'empty', 'message': 'NIC is required.'})
+    is_valid, status, message = validate_temp_nic(nic)
+    return JsonResponse({'valid': is_valid, 'status': status, 'message': message})
 
 def voter_signup(request):
     if request.method == 'POST':
@@ -44,14 +53,18 @@ def voter_signup(request):
                     'mobile_number': mobile,
                     'is_mobile_verified': False
                 })
+                # Mark NIC as used in temp_nic collection
+                mark_temp_nic_status(nic, is_used=True, user_id=user.id)
                 print(f"DEBUG: Inserted to Registration collection with ID: {result.inserted_id}")
             except OperationFailure as e:
                 user.delete()
+                mark_temp_nic_status(nic, is_used=False)
                 error_msg = f"Database Error: {e.details.get('errmsg', str(e))}. Admin: Check MONGO_URI in settings.py."
                 form.add_error(None, error_msg)
                 return render(request, 'voter_signup.html', {'form': form})
             except Exception as e:
                 user.delete()
+                mark_temp_nic_status(nic, is_used=False)
                 form.add_error(None, f"Unexpected error: {str(e)}")
                 return render(request, 'voter_signup.html', {'form': form})
             
