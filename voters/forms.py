@@ -48,10 +48,6 @@ class VoterSignupForm(forms.Form):
         }), 
         label='Confirm Password'
     )
-    terms_accepted = forms.BooleanField(
-        required=True, 
-        label='I accept the Terms of Services'
-    )
 
     def clean_nic(self):
         nic = self.cleaned_data.get('nic', '').strip()

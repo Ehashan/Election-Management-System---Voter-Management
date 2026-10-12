@@ -66,19 +66,6 @@
             {% endif %}
         </div>
 
-        <div class="checkbox-group">
-            {{ form.terms_accepted }}
-            <label for="id_terms_accepted"><span data-i18n="signup_terms">I accept the Terms of Service</span></label>
-            {% if form.terms_accepted.errors %}
-            <div class="error">{{ form.terms_accepted.errors }}</div>
-            {% endif %}
-        </div>
-
-        <div class="recaptcha-container">
-            <div style="border: 1px solid #ddd; padding: 10px; background: #f9f9f9; text-align: center;">
-                [ I'm not a robot (reCAPTCHA) ]
-            </div>
-        </div>
 
         <div class="text-center">
             <a href="#" data-i18n="signup_instructions">Instructions</a>

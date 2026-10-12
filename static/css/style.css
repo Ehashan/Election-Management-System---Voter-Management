@@ -221,6 +221,56 @@ h2::before {
     cursor: not-allowed;
 }
 
+/* Password Visibility Toggle */
+.password-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 42px !important;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    padding: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #718096;
+    border-radius: 4px;
+    line-height: 1;
+    transition: color 0.2s ease, background-color 0.2s ease;
+    z-index: 2;
+}
+
+.password-toggle:hover {
+    color: var(--primary-pink);
+    background-color: rgba(170, 96, 200, 0.1);
+}
+
+.password-toggle:focus-visible {
+    outline: 2px solid var(--primary-pink);
+    outline-offset: 1px;
+}
+
+.password-toggle .eye-icon {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    display: block;
+    pointer-events: none;
+}
+
 /* Radio buttons */
 .radio-group {
     display: flex;
