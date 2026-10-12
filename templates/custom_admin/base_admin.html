@@ -194,19 +194,127 @@
             color: var(--danger);
         }
 
+        /* Mobile Admin Top Navigation */
+        .mobile-admin-bar {
+            display: none;
+            background-color: var(--bg-card);
+            border-bottom: 1px solid rgba(0, 243, 255, 0.15);
+            padding: 12px 18px;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+
+        .mobile-admin-brand {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary-color);
+            font-size: 1.15rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .mobile-menu-btn {
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            color: var(--primary-color);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(3px);
+            z-index: 105;
+        }
+
         @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .mobile-admin-bar {
+                display: flex;
+            }
+
             .sidebar {
-                width: 70px;
+                width: 260px;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 110;
+                box-shadow: 4px 0 24px rgba(0, 0, 0, 0.6);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .sidebar-overlay.active {
+                display: block;
             }
 
             .brand span,
             .nav-item span,
             .user-profile span {
-                display: none;
+                display: inline;
             }
 
             .main-content {
-                margin-left: 70px;
+                margin-left: 0;
+                padding: 18px 14px;
+                width: 100%;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .header-actions {
+                width: 100%;
+            }
+
+            .header-actions .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            table {
+                min-width: 650px;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .search-bar button {
+                width: 100%;
+            }
+
+            .card {
+                padding: 16px 12px;
             }
         }
     </style>
@@ -214,8 +322,22 @@
 </head>
 
 <body>
+    <!-- Mobile Admin Top Bar -->
+    <div class="mobile-admin-bar">
+        <a href="{% url 'admin_dashboard' %}" class="mobile-admin-brand">
+            <i class="fas fa-vote-yea"></i>
+            <span>EMS ADMIN</span>
+        </a>
+        <button type="button" class="mobile-menu-btn" id="mobileMenuToggle" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- Backdrop for mobile sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <!-- Sidebar -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="adminSidebar">
         <div class="brand">
             <i class="fas fa-vote-yea"></i>
             <span>EMS ADMIN</span>
@@ -270,7 +392,21 @@
     </main>
 
     <script>
-        // Common JS here
+        const menuToggle = document.getElementById('mobileMenuToggle');
+        const adminSidebar = document.getElementById('adminSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        if (menuToggle && adminSidebar && sidebarOverlay) {
+            menuToggle.addEventListener('click', function() {
+                adminSidebar.classList.toggle('open');
+                sidebarOverlay.classList.toggle('active');
+            });
+
+            sidebarOverlay.addEventListener('click', function() {
+                adminSidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('active');
+            });
+        }
     </script>
     {% block extra_js %}{% endblock %}
 </body>

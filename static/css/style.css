@@ -2329,4 +2329,321 @@ footer, .site-footer {
     }
 }
 
+/* =========================================================
+   COMPREHENSIVE MOBILE RESPONSIVENESS (ALL PUBLIC PAGES)
+   ========================================================= */
+
+@media (max-width: 820px) {
+    .container {
+        padding: 40px 24px;
+        margin: 25px auto;
+        max-width: 95%;
+        border-radius: 12px;
+    }
+
+    .top-bar {
+        padding: 10px 14px;
+        font-size: 14px;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .top-bar .auth-links {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px 12px;
+    }
+
+    .top-bar .auth-links a {
+        margin: 0;
+        font-size: 13.5px;
+    }
+
+    .main-header {
+        padding: 12px 14px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .logo-section {
+        gap: 14px;
+    }
+
+    .logo-section img {
+        height: 48px;
+    }
+
+    .logo-text h1 {
+        font-size: 14px;
+        line-height: 1.25;
+    }
+
+    .logo-text p {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 640px) {
+    .top-bar {
+        justify-content: center;
+        text-align: center;
+        padding: 10px 12px;
+    }
+
+    .top-bar .auth-links {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .main-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 14px 12px;
+    }
+
+    .logo-section {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .logo-section img {
+        height: 52px;
+    }
+
+    .logo-text h1 {
+        font-size: 13.5px;
+    }
+
+    .language-selector-wrapper {
+        align-self: center;
+        margin-top: 4px;
+        padding: 6px 14px;
+    }
+
+    .container {
+        padding: 26px 16px;
+        margin: 16px auto;
+        max-width: calc(100% - 20px);
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        font-size: 13.5px;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="password"],
+    .form-group input[type="email"],
+    .form-group input[type="number"],
+    .form-group input[type="date"] {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+
+    .button-group {
+        flex-direction: column-reverse;
+        gap: 10px;
+        margin-top: 24px;
+    }
+
+    .button-group .btn,
+    .button-group button {
+        width: 100%;
+        text-align: center;
+        padding: 12px 18px;
+    }
+
+    .radio-group {
+        gap: 10px 14px;
+    }
+
+    .radio-group label {
+        font-size: 13px;
+    }
+
+    .camera-section {
+        padding: 14px 10px;
+    }
+
+    .camera-section video,
+    .camera-section img,
+    #video,
+    #photo {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        object-fit: cover;
+    }
+
+    .camera-section .btn {
+        width: 100%;
+        margin: 10px 0 0 0 !important;
+    }
+
+    .voter-id {
+        font-size: 24px;
+        word-break: break-all;
+        padding: 12px;
+    }
+
+    .voter-id-display {
+        padding: 16px 12px;
+    }
+
+    .home-hero-section {
+        padding: 24px 10px 40px;
+        min-height: auto;
+    }
+
+    .voting-modal-card {
+        padding: 24px 14px;
+        border-radius: 16px;
+    }
+
+    .voting-modal-card .modal-title {
+        font-size: 22px;
+        line-height: 1.25;
+    }
+
+    .modal-subtitle {
+        font-size: 14px;
+        margin-bottom: 24px;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .modal-actions .btn,
+    .modal-actions a {
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .timeline-item {
+        grid-template-columns: 24px 1fr;
+        gap: 12px;
+    }
+
+    .timeline-dot {
+        width: 16px;
+        height: 16px;
+        margin-top: 3px;
+    }
+
+    .timeline-content {
+        padding: 14px 14px;
+        border-radius: 12px;
+    }
+
+    .timeline-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .timeline-title {
+        font-size: 15px;
+    }
+
+    .timeline-desc {
+        font-size: 12.5px;
+    }
+
+    .services-cards-grid,
+    .steps-grid,
+    .officer-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .service-card-header {
+        gap: 10px;
+    }
+
+    .service-icon {
+        font-size: 26px;
+        padding: 8px;
+    }
+
+    .service-card-title {
+        font-size: 16px;
+    }
+
+    .service-card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .status-result-card {
+        padding: 18px 14px;
+        border-radius: 14px;
+    }
+
+    .result-title {
+        font-size: 16px;
+    }
+
+    .result-desc {
+        font-size: 13px;
+    }
+
+    .result-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .privacy-policy-box {
+        padding: 20px 14px;
+    }
+
+    .footer-container {
+        gap: 10px;
+    }
+
+    .footer-links {
+        gap: 6px 10px;
+    }
+
+    .footer-links a {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 400px) {
+    .container {
+        padding: 20px 12px;
+        margin: 12px auto;
+        border-radius: 10px;
+    }
+
+    .logo-text h1 {
+        font-size: 12.5px;
+    }
+
+    .voting-modal-card .modal-title {
+        font-size: 19px;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+}
+
+
 
